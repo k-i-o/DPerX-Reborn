@@ -2,9 +2,9 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { ipcListeners } from './ipc-listeners'
+import { ipcListeners, updater } from './workers'
 import { Variables } from './variables'
-import { Spinbot } from './models/spinbot'
+import { Spinbot } from './models/Spinbot'
 
 function createWindow(): void {
     
@@ -59,9 +59,9 @@ app.whenReady().then(() => {
     variables.spinbot.enabled = true; // test
     
     // 2. START 'THREAD' THAT HANDLE THE VARIABLES
-    // 3. PASS TO THE IPCLISTENER THE OBJECT TO MAKE CHANGE THE VARIABLES
+    updater(variables);
 
-    // IPC test
+    // 3. PASS TO THE IPCLISTENER THE OBJECT TO MAKE CHANGE THE VARIABLES
     ipcListeners(variables);  
 
     createWindow()
