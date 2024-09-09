@@ -6,18 +6,56 @@ body {
     background-color: #1d1d29;
     color: white;
     user-select: none;
-    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
 
     .container {
         display: flex;
         align-items: center;
-        justify-content: center;
-        flex-direction: column;
+        justify-content: space-evenly;
         gap: 10px;
+        height: 100vh;
+        width: 100vw;
 
-        a {
-            padding: 10px;
-            background-color: rgb(54, 34, 100);
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+            width: 100%;
+
+            a {
+                padding: 10px;
+                background-color: rgb(54, 34, 100);
+            }
+        }
+
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 100%;
+            width: 100%;
+            gap: 10px;
+
+            .players {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+
+                li {
+                    width: 100%;
+                    padding: 10px;
+                    display: flex;
+                    gap: 5px;
+                }
+            }
         }
     }
+
 }

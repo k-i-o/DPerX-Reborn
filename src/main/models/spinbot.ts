@@ -26,7 +26,7 @@ export class Spinbot extends BaseCheat implements Base {
         const x = Math.sin(radians) * 100; 
         const y = Math.cos(radians) * 100; 
         
-        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr + offsets.aimX, x, FLOAT);
-        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr + offsets.aimY, y, FLOAT);
+        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr + offsets.client.aimX, x, FLOAT);
+        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr + offsets.client.aimY, y, FLOAT);
     }
 }

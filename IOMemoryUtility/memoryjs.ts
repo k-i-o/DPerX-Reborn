@@ -3,6 +3,7 @@ const memoryjs = require('../../IOMemoryUtility/memoryjs/index');
 export const INT = memoryjs.INT;
 export const FLOAT = memoryjs.FLOAT;
 export const PTR = memoryjs.PTR;
+export const BOOL = memoryjs.BOOL;
 
 export function openProcess(pName: string) {
     return memoryjs.openProcess(pName);

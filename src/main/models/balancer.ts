@@ -32,8 +32,8 @@ export class Balancer extends BaseCheat implements Base {
     }
 
     resetWalk(): void {
-        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr! + offsets.lWalk, 0, INT);
-        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr! + offsets.rWalk, 0, INT);
+        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr! + offsets.client.lWalk, 0, INT);
+        writeMemory(this.systemVariables.handle, this.systemVariables.baseClientAddr! + offsets.client.rWalk, 0, INT);
         this.needReset = false;
     }
     

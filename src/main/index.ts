@@ -4,7 +4,6 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { ipcListeners, updater } from './workers'
 import { Variables } from './variables'
-import { Spinbot } from './models/Spinbot'
 
 function createWindow(): void {
     
@@ -55,9 +54,7 @@ app.whenReady().then(() => {
 
     // 1. INIT OBJECT WITH ALL THE VARIABLES
     const variables = new Variables();
-    
-    variables.spinbot.enabled = true; // test
-    
+        
     // 2. START 'THREAD' THAT HANDLE THE VARIABLES
     updater(variables);
 

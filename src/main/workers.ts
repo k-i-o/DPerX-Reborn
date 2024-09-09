@@ -3,6 +3,7 @@ import { Variables } from './variables';
 import {  openProcess, PTR, readMemory } from '../../IOMemoryUtility/memoryjs';
 import { Notification } from 'electron/main';
 import { offsets } from './offsets';
+import { Server } from './models/Server';
 
 export function updater(variables: Variables) {
 
@@ -16,6 +17,8 @@ export function updater(variables: Variables) {
         const now = Date.now();  
         delta = now - time;       
         time = now;      
+
+        Server.getInstance(variables.system).update();
 
         if(variables.spinbot.enabled) {
             variables.spinbot.execute();
@@ -32,7 +35,7 @@ export function updater(variables: Variables) {
         //     variables.balancer.resetWalk();
         // }
 
-    }, 10);
+    }, 100);
 }
 
 export function ipcListeners(variables: Variables) {
@@ -68,6 +71,15 @@ export function ipcListeners(variables: Variables) {
             }
         }
 
+    });
+
+    ipcMain.on('getOnlinePlayers', (event) => {
+        const onlinePlayers = Server.getInstance(variables.system).players;
+        if(!onlinePlayers) {
+            event.reply('onlinePlayersResponse', []);
+        } else {
+            event.reply('onlinePlayersResponse', onlinePlayers);
+        }
     });
 
     ipcMain.on('enableCheat', async (_, type) => {
