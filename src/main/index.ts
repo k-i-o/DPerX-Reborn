@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { ipcListeners, updater } from './workers'
-import { Variables } from './variables'
+import { Variables } from './models/singletons/Variables'
 
 function createWindow(): void {
     

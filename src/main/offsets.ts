@@ -8,6 +8,7 @@ export const offsets = {
         rWalk: BigInt(0x108),
     },
     server: {
+        localPlayerId: BigInt(0x1450),
         onlinePlayers: BigInt(0x1454),
         gametick: BigInt(0x147C),
         playerX: BigInt(0x1480),

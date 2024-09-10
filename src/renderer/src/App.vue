@@ -1,51 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { IPlayer } from './models/IPlayer';
+import { Ref, ref } from 'vue';
+import Slider from 'primevue/slider';
+import InputText from 'primevue/inputtext';
+
+let cheats: Ref<{ id: string, displayName: string, components?: [{ name: string, type: string, value: any }] }[]> = ref([]);
 
 const enableCheat = (type: string) => {
     window.electron.ipcRenderer.send('enableCheat', type);
-}
+};
 
 const attach = () => {
     window.electron.ipcRenderer.send('attach');
-}
+};
 
-const players = ref<IPlayer[]>([]);
+const updateValue = (cheatId: string, componentName: string, newValue: any) => {
+    window.electron.ipcRenderer.send('updateValue', { cheatId, componentName, newValue });
+};
 
-setInterval(() => {
-    window.electron.ipcRenderer.send('getOnlinePlayers');
-}, 2000);
-
-window.electron.ipcRenderer.on('onlinePlayersResponse', (_, data: IPlayer[]) => {
-    players.value = data;
-    console.log(players.value.length);
-}); 
+window.electron.ipcRenderer.send('getCheats');
+window.electron.ipcRenderer.on('getCheatsResponse', (_, data: { id: string, displayName: string }[]) => {
+    cheats.value = data;
+});
 </script>
 
 <template>
     <div class="container">
         <div class="buttons">
             <a target="_blank" rel="noreferrer" @click="attach()">Attach process</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('aimbot')">Enable aimbot</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('balancer')">Enable balancer</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('spinbot')">Enable spinbot</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('esp_box')">Enable esp box</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('esp_snapline')">Enable esp snapline</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('spoofer')">Run spoofer</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('bot_attack')">Run bot attack</a>
-            <a target="_blank" rel="noreferrer" @click="enableCheat('join_bot')">Make join a bot</a>
-        </div>
-        <div class="players-list">
-            Online players: {{ players.length }}
-            <ul class="players">
-                <li v-for="p in players" :key="p.id">
-                    <span>{{ p.id }}</span>
-                    <span>{{ p.gametick }}</span>
-                    <span>{{ p.position }}</span>
-                    <span>{{ p.frozen }}</span>
-                </li>
-            </ul>
+
+            <div v-for="c in cheats" :key="c.id">
+                <a @click="enableCheat(c.id)">{{c.displayName}}</a>
+                <div v-for="component in c.components" :key="component.name">
+                    {{ component.name }}
+
+                    <div v-if="component.type == 'slider'">
+                        <InputText v-model.number="component.value" @change="updateValue(c.id, component.name, component.value)" min="0" max="999" />
+                        <Slider v-model="component.value" @change="updateValue(c.id, component.name, component.value)" min="0" max="999" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="players-list">
+                Online players: {{ players.length }}
+                <ul class="players">
+                    <li v-for="p in players" :key="p.id">
+                        <span>{{ p.id }}</span>
+                        <span>{{ p.gametick }}</span>
+                        <span>{{ p.position }}</span>
+                        <span>{{ p.frozen }}</span>
+                    </li>
+                </ul>
+            </div> -->
         </div>
     </div>
-
 </template>

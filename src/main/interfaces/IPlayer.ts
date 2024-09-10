@@ -5,7 +5,7 @@ export interface IPlayer {
     gametick: number;
     position: IVector2;
     velocity: IVector2;
-    hookingTime: number;
+    // hookingTime: number;
     frozen: boolean;
     playerSize: number;
 }

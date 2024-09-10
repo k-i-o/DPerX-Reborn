@@ -1,32 +1,30 @@
-import { IPlayer } from "./models/IPlayer";
-import { IVector2 } from "./models/IVector2";
-import { Server } from "./models/Server";
+import { IPlayer } from "./interfaces/IPlayer";
+import { IVector2 } from "./interfaces/IVector2";
+import { Server } from "./models/singletons/Server";
 
 export function distance(a: IVector2, b: IVector2) {
     return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 }
 
-export function getNearestToPlayer(maxDistance: number) {//: IPlayer {
+export function getNearestToPlayer(maxDistance: number): IPlayer | undefined {
+    const server = Server.getInstance();
+    const localPlayer = server.localPlayer;
+    
+    if (!localPlayer) return undefined;
 
-    // let closestDist: number = maxDistance;
-    // let closestPlayer: IPlayer;
+    let closestPlayer: IPlayer | undefined;
+    let closestDist = maxDistance;
 
-    // for (let i = 0; i < Server.maxPlayers; i++)
-    // {
-        // const player = server->players[i];
+    for (const player of server.players) {
+        if (player.id != localPlayer.id && !player.frozen && player.gametick != 0) {
+            const dist = distance(player.position, localPlayer.position);
 
-        // if (player.id != Server::localPlayer.id && server->GetValidPlayer(player) && ((avoid_freezed_tee && !player.freezed) || !avoid_freezed_tee))
-        // {
-        //     float dist = Aimbot::distance(player.position, Server::localPlayer.position);
+            if (dist > 0 && dist < closestDist) {
+                closestDist = dist;
+                closestPlayer = player;
+            }
+        }
+    }
 
-        //     if (dist > 0 && dist < closestDist)
-        //     {
-        //         closestDist = dist;
-        //         closestPlayer = player;
-        //     }
-            
-        // }
-    // }
-
-    // return closestPlayer;
+    return closestPlayer;
 }
