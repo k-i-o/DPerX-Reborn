@@ -1,6 +1,6 @@
 import { BOOL, INT, readMemory } from "../../../../IOMemoryUtility/memoryjs";
-import { offsets } from "../../offsets";
 import { IPlayer } from "../../interfaces/IPlayer";
+import { Offsets } from "./Offsets";
 import { Variables } from "./Variables";
 
 export class Server {
@@ -29,19 +29,19 @@ export class Server {
             return readMemory(systemVar.handle, baseAddr + offset, type);
         }
 
-        this.onlinePlayers = read(offsets.server.onlinePlayers, INT);
-        const localPlayerId = read(offsets.server.localPlayerId, INT);
+        this.onlinePlayers = read(Offsets.getInstance().server.onlinePlayers, INT);
+        const localPlayerId = read(Offsets.getInstance().server.localPlayerId, INT);
 
         this.players = [];
         for(let i = 0; i < this.maxPlayers; i++) {
             let offsetPlayers = BigInt(i * 0xF8);
             const player: IPlayer = {
                 id: i,
-                gametick: read(offsets.server.gametick + offsetPlayers, INT),
-                position: { x: read(offsets.server.playerX + offsetPlayers, INT), y: read(offsets.server.playerY + offsetPlayers, INT) },
-                velocity: { x: read(offsets.server.velX + offsetPlayers, INT), y: read(offsets.server.velY + offsetPlayers, INT) },
-                // hookingTime: read(offsets.server.hookingTime + offsetPlayers, FLOAT),
-                frozen: read(offsets.server.frozen + offsetPlayers, BOOL),
+                gametick: read(Offsets.getInstance().server.gametick + offsetPlayers, INT),
+                position: { x: read(Offsets.getInstance().server.playerX + offsetPlayers, INT), y: read(Offsets.getInstance().server.playerY + offsetPlayers, INT) },
+                velocity: { x: read(Offsets.getInstance().server.velX + offsetPlayers, INT), y: read(Offsets.getInstance().server.velY + offsetPlayers, INT) },
+                // hookingTime: read(Offsets.getInstance().server.hookingTime + offsetPlayers, FLOAT),
+                frozen: read(Offsets.getInstance().server.frozen + offsetPlayers, BOOL),
                 playerSize: 64
             }
 

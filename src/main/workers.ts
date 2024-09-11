@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron';
 import {  openProcess, PTR, readMemory } from '../../IOMemoryUtility/memoryjs';
 import { Notification } from 'electron/main';
-import { offsets } from './offsets';
+import { Offsets } from './models/singletons/Offsets';
 import { Server } from './models/singletons/Server';
 import { Variables } from './models/singletons/Variables';
 
@@ -102,8 +102,8 @@ export function ipcListeners() {
             Variables.getInstance().system.handle = proc.handle;
             const base = BigInt(proc.modBaseAddr);
 
-            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + offsets.staticServerAddr, PTR);
-            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + offsets.staticClientAddr, PTR);
+            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().staticServerAddr, PTR);
+            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().staticClientAddr, PTR);
 
             Variables.getInstance().system.gameAttached = true;
             console.log("Game attached");

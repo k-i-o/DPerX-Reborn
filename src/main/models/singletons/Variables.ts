@@ -5,21 +5,13 @@ import { Spinbot } from "../cheats/Spinbot";
 
 export class Variables {
 
-    system: ISystemVariables;
-    spinbot: Spinbot;
-    aimbot: Aimbot;
-    balancer: Balancer;
+    system: ISystemVariables = { gameAttached: false, handle: undefined, baseClientAddr: undefined, baseServerAddr: undefined };
+    spinbot: Spinbot = new Spinbot();
+    aimbot: Aimbot = new Aimbot();
+    balancer: Balancer = new Balancer();
 
     private static instance: Variables;
-
-    private constructor() {
-        this.system = { gameAttached: false, handle: undefined, baseClientAddr: undefined, baseServerAddr: undefined };
-
-        this.spinbot = new Spinbot();
-        this.aimbot = new Aimbot();
-        this.balancer = new Balancer();
-    }
-
+    private constructor() {}
     static getInstance(): Variables {
         if (!Variables.instance) {
             Variables.instance = new Variables();

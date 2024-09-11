@@ -1,5 +1,5 @@
 import { INT, writeMemory } from "../../../../IOMemoryUtility/memoryjs";
-import { offsets } from "../../offsets";
+import { Offsets } from "../singletons/Offsets";
 import { IBase } from "../../interfaces/IBase";
 import { Variables } from "../singletons/Variables";
 import { getNearestToPlayer } from "../../utils";
@@ -20,13 +20,13 @@ export class Balancer implements IBase {
         if(!nearest) return;
       
         if(localPlayer.position.x > nearest.position.x){
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + offsets.client.rWalk, 0, INT);
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + offsets.client.lWalk, 1, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.rWalk, 0, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.lWalk, 1, INT);
         }
 
         if(localPlayer.position.x < nearest.position.x){
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + offsets.client.lWalk, 0, INT);
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + offsets.client.rWalk, 1, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.lWalk, 0, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.rWalk, 1, INT);
         }
 
         this.needReset = true;  
@@ -36,8 +36,8 @@ export class Balancer implements IBase {
         const systemVar = Variables.getInstance().system;
         if (!systemVar.baseClientAddr) return;
 
-        writeMemory(systemVar.handle, systemVar.baseClientAddr! + offsets.client.lWalk, 0, INT);
-        writeMemory(systemVar.handle, systemVar.baseClientAddr! + offsets.client.rWalk, 0, INT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().client.lWalk, 0, INT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().client.rWalk, 0, INT);
         this.needReset = false;
     }
     

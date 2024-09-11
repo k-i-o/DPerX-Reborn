@@ -1,5 +1,5 @@
 import { FLOAT, writeMemory } from "../../../../IOMemoryUtility/memoryjs";
-import { offsets } from "../../offsets";
+import { Offsets } from "../singletons/Offsets";
 import { IBase } from "../../interfaces/IBase";
 import { Variables } from "../singletons/Variables";
 
@@ -23,7 +23,7 @@ export class Spinbot implements IBase {
         const x = Math.sin(radians) * this.distance; 
         const y = Math.cos(radians) * this.distance; 
 
-        writeMemory(systemVar.handle, systemVar.baseClientAddr + offsets.client.aimX, x, FLOAT);
-        writeMemory(systemVar.handle, systemVar.baseClientAddr + offsets.client.aimY, y, FLOAT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().client.aimX, x, FLOAT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().client.aimY, y, FLOAT);
     }
 }

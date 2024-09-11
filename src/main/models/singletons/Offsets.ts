@@ -1,13 +1,16 @@
-export const offsets = {
-    staticServerAddr: BigInt(0x5AC880),
-    staticClientAddr: BigInt(0x57F9D0),
-    client: {
+export class Offsets {
+
+    staticServerAddr = BigInt(0x5AC880);
+    staticClientAddr = BigInt(0x57F9D0);
+
+    client = {
         aimX: BigInt(0x10),
         aimY: BigInt(0x14),
         lWalk: BigInt(0x100),
         rWalk: BigInt(0x108),
-    },
-    server: {
+    };
+
+    server = {
         localPlayerId: BigInt(0x1450),
         onlinePlayers: BigInt(0x1454),
         gametick: BigInt(0x147C),
@@ -20,4 +23,13 @@ export const offsets = {
         frozen: BigInt(0x14CC),
         hookingTime: BigInt(0x14A4)
     }
-};
+
+    private static instance: Offsets;
+    private constructor() {}
+    static getInstance(): Offsets {
+        if (!Offsets.instance) {
+            Offsets.instance = new Offsets();
+        }
+        return Offsets.instance;
+    }
+}

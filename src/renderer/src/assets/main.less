@@ -1,4 +1,4 @@
-body {
+html, body {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,6 +10,12 @@ body {
     margin: 0;
     height: 100%;
     width: 100%;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+
+    a, input, .input {
+        -webkit-app-region: no-drag;
+    }
 
     .container {
         display: flex;
