@@ -1,6 +1,6 @@
 import { INT, writeMemory } from "../../../../IOMemoryUtility/memoryjs";
 import { Offsets } from "../singletons/Offsets";
-import { IBase } from "../../interfaces/IBase";
+import { IBase } from "../../../interfaces/IBase";
 import { Variables } from "../singletons/Variables";
 import { getNearestToPlayer } from "../../utils";
 import { Server } from "../singletons/Server";

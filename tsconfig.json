@@ -3,5 +3,9 @@
     "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
     "compilerOptions": {
         "lib": ["es2020", "dom"],
+        "baseUrl": "./",
+        "paths": {
+            "@interfaces/*": ["src/interfaces/*"]
+        }
     }
 }

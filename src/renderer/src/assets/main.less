@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap');
+
+@import '../assets/variables.less';
+
 html, body {
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-color: #1d1d29;
+    background-color: @c-t-variant;
     color: white;
     user-select: none;
     padding: 0;
@@ -12,56 +16,278 @@ html, body {
     width: 100%;
     -webkit-user-select: none;
     -webkit-app-region: drag;
+    font-family: "SUSE", sans-serif;
+    border-radius: @r-border;
+    border-width: 3px; 
+    border-style: solid;    
+    animation: borderMove 12s 0s infinite alternate-reverse;
 
-    a, input, .input {
+    @keyframes borderMove {
+        0% {
+            border-image: linear-gradient(to bottom right, @c-accent, transparent 65%) 1;
+        }
+        40% {
+            border-image: linear-gradient(to bottom right, @c-accent, transparent 80%) 1;
+        }
+        60% {
+            border-image: linear-gradient(to top left, @c-accent, transparent 80%) 1;
+        }
+        100% {
+            border-image: linear-gradient(to top left, @c-accent, transparent 65%) 1;
+        }
+    } 
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
+    a, input, .input, button {
+        -webkit-user-select: auto;
         -webkit-app-region: no-drag;
+    }
+
+    button {
+        border: none;
+        padding: 10px;
+        background-color: fade(@c-t, 80%);
+        cursor: pointer;
     }
 
     .container {
         display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 10px;
+        gap: 25px;
         height: 100vh;
         width: 100vw;
+        padding: 25px;
+        background-color: @c-t-variant;
+        border-radius: @r-border;
 
-        .buttons {
+        .categories {
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            width: @w-menu;
             height: 100%;
-            width: 100%;
-            gap: 35px;
+            background-color: fade(@c-t, 80%);
+            border-radius: @r-border;
+            padding: 15px;
+            overflow-y: auto;
 
-            a {
-                padding: 10px;
-                background-color: rgb(54, 34, 100);
+            .attach {
+                border-radius: @r-border;
+                background-color: @c-accent;
+                transition: all .2s 0s ease-in-out; 
+
+                .icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                &:hover {
+                    background-color: fade(@c-accent, 70%);
+                }
+            }
+
+            .horizontal-separator {
+                width: 100%;
+                height: 2px;
+                background-color: fade(@c-s, 15%);
+                border-radius: 2px;
+            }
+
+            .category {
+                width: 100%;
+                height: 50px;
+                padding: 9px 6px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 8px;
+                border-radius: @r-border;
                 cursor: pointer;
+                transition: all .2s 0s ease-in-out;
+                -webkit-user-select: auto;
+                -webkit-app-region: no-drag;
+
+                &:hover {
+                    background-color: lighten(@c-t, 5%);
+                }
+
+                .active-bar {
+                    opacity: 0;
+                    background-color: @c-accent;
+                    height: 100%;
+                    width: 2px;
+                    border-radius: 2px;
+                    transition: all .2s 0.1s ease-in-out;
+                }
+                
+                span {
+                    color: fade(@c-s, 50%);
+                    transition: all .2s 0s ease-in-out;
+                }
+
+                .icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding-right: 2px;
+                    opacity: .6;
+                    transition: all .2s 0s ease-in-out;
+                }
+
+                &.active {
+                    color: @c-s;
+                    background-color: fade(lighten(@c-t, 13%), 90%);
+
+                    .active-bar {
+                        opacity: 1;
+                    }
+
+                    span {
+                        color: @c-s; 
+                    }
+
+                    .icon {
+                        opacity: 1;
+                    }
+
+                }
+
             }
         }
 
-        .players-list {
+        .view {
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            height: 100%;
             width: 100%;
-            gap: 10px;
+            height: 100%;
+            overflow-y: auto;
 
-            .players {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-                width: 100%;
+            .header {
+                display: flex;
+                justify-content: space-between;
 
-                li {
-                    width: 100%;
-                    padding: 10px;
+                .metadata {
+                    padding-top: 2px;
                     display: flex;
+                    flex-direction: column;
                     gap: 5px;
+                    width: 60%;
+
+                    .description {
+                        opacity: .7;
+                    }
                 }
+
+                .extra {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 10px;
+                    -webkit-user-select: auto;
+                    -webkit-app-region: no-drag;
+
+                    .avatar {
+                        margin: 5px;
+                        border-radius: 50%;
+                        border: 2px solid fade(lighten(@c-t, 13%), 90%);
+                        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.243);
+                        width: 70px; 
+                        height: 70px;
+                        overflow: hidden;
+                        position: relative;
+                        cursor: pointer;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        .settings-icon {
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 100%;
+                            height: 100%;
+                            z-index: 2;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            background-color: rgba(0, 0, 0, 0.4);
+                            backdrop-filter: blur(2px);
+                            opacity: 0;
+                            transition: all .3s 0s ease-in-out;
+
+                            svg {
+                                width: 60%;
+                                height: 60%;
+                                position: relative;
+                                stroke: @c-accent;
+                            }
+                        }
+
+                                                
+                        &:hover {
+                            .settings-icon {
+                                opacity: 1;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            .options {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px 0;
+
+                .option {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;                    
+                    flex-direction: column;
+                    gap: 10px; 
+                    background-color: fade(@c-t, 80%);
+                    border-radius: @r-border;
+                    padding: 15px;
+                    -webkit-user-select: auto;
+                    -webkit-app-region: no-drag;
+
+                    .toggle {
+                        display: flex;
+                        gap: 5px; 
+                        height: 100%;
+                    }
+
+                    .components {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                        width: 100%;
+
+                        .component {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+
+                            .input {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+                
             }
         }
     }

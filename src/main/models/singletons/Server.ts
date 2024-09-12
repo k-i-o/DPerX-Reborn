@@ -1,5 +1,5 @@
 import { BOOL, INT, readMemory } from "../../../../IOMemoryUtility/memoryjs";
-import { IPlayer } from "../../interfaces/IPlayer";
+import { IPlayer } from "../../../interfaces/IPlayer";
 import { Offsets } from "./Offsets";
 import { Variables } from "./Variables";
 

@@ -1,6 +1,6 @@
 import { FLOAT, writeMemory } from "../../../../IOMemoryUtility/memoryjs";
 import { Offsets } from "../singletons/Offsets";
-import { IBase } from "../../interfaces/IBase";
+import { IBase } from "../../../interfaces/IBase";
 import { Variables } from "../singletons/Variables";
 
 export class Spinbot implements IBase {

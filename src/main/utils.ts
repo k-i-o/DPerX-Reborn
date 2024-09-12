@@ -1,5 +1,5 @@
-import { IPlayer } from "./interfaces/IPlayer";
-import { IVector2 } from "./interfaces/IVector2";
+import { IPlayer } from "../interfaces/IPlayer";
+import { IVector2 } from "../interfaces/IVector2";
 import { Server } from "./models/singletons/Server";
 
 export function distance(a: IVector2, b: IVector2) {

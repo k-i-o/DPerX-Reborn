@@ -1,6 +1,6 @@
 import { Aimbot } from "../cheats/Aimbot";
 import { Balancer } from "../cheats/Balancer";
-import { ISystemVariables } from "../../interfaces/ISystemVariables";
+import { ISystemVariables } from "../../../interfaces/ISystemVariables";
 import { Spinbot } from "../cheats/Spinbot";
 
 export class Variables {

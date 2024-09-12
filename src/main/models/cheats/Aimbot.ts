@@ -1,4 +1,8 @@
-import { IBase } from "../../interfaces/IBase";
+import { FLOAT, writeMemory } from "../../../../IOMemoryUtility/memoryjs";
+import { IBase } from "../../../interfaces/IBase";
+import { getNearestToPlayer } from "../../utils";
+import { Offsets } from "../singletons/Offsets";
+import { Server } from "../singletons/Server";
 import { Variables } from "../singletons/Variables";
 
 export class Aimbot implements IBase {
@@ -9,8 +13,17 @@ export class Aimbot implements IBase {
 
     execute(delta: number): void {
         const systemVar = Variables.getInstance().system;
-        if (!systemVar.baseClientAddr) return;
+        const localplayer = Server.getInstance().localPlayer;
+        if (!systemVar.baseClientAddr || !localplayer) return;
 
+        const nearest = getNearestToPlayer(this.maxDistance);
+        if(!nearest) return;
+
+        const target = { x: nearest.position.x - localplayer.position.x, y: nearest.position.y - localplayer.position.y };
+    
+        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.aimX, target.x, FLOAT);
+        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.aimY, target.y, FLOAT);
+    
     }
 
 }
