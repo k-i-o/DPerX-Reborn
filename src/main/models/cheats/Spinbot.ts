@@ -12,6 +12,8 @@ export class Spinbot implements IBase {
     speed: number = 50;
     autofire: boolean = false;
 
+    hotkeys: any[] = [];
+
     execute(delta: number) {
         const systemVar = Variables.getInstance().system;
         if (!systemVar.baseClientAddr) return;

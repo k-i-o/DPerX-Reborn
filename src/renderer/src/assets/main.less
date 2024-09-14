@@ -27,7 +27,7 @@
     --c-t: fade(@c-t, 99%);
     --c-t-variant: lighten(@c-t, 6%);
     --c-t-variant2: fade(@c-t, 80%);
-    --c-t-variant3: fade(lighten(@c-t, 13%), 90%);
+    --c-t-variant3: fade(lighten(@c-t, 11%), 90%);
     --c-t-variant4: lighten(@c-t, 5%);
 }
 
@@ -87,6 +87,10 @@ html, body {
         padding: 10px;
         background-color: var(--c-t-variant2);
         cursor: pointer;
+
+        &:focus-visible {
+            outline: none;
+        }
     }
 
     .container {
@@ -197,8 +201,8 @@ html, body {
 
             .category, .setting {
                 width: 100%;
-                height: 50px;
-                padding: 9px 6px;
+                height: 60px;
+                padding: 13px 5px;
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
@@ -417,9 +421,22 @@ html, body {
                                 width: 100%;
                             } 
 
+                            .listener-component {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
+
+                                button {
+                                    background-color: var(--c-t-variant3);
+                                    padding: 10px 25px; 
+                                    border-radius: @r-border;
+                                }
+                            }
+
                             .toggle-component {
                                 display: flex;
                                 gap: 10px;
+
                             }
 
                             .slider-component {

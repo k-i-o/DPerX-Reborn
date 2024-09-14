@@ -6,6 +6,13 @@ import { Server } from './models/singletons/Server';
 import { Variables } from './models/singletons/Variables';
 import { IMenuCheatCategory } from '../interfaces/IMenuCheatCategory';
 
+function keyPressed(keys): boolean {
+
+}
+
+function canBeExecuted(cheat: any): boolean {
+    return (!cheat.hotkeys && cheat.enabled) || (cheat.hotkeys && cheat.enabled && keyPressed(cheat.hotkeys));
+}
 
 export function updater() {
 
@@ -22,7 +29,7 @@ export function updater() {
 
         Server.getInstance().update();
 
-        if(Variables.getInstance().spinbot.enabled) {
+        if(canBeExecuted(Variables.getInstance().spinbot)) {
             Variables.getInstance().spinbot.execute(delta);
         }
 
@@ -68,6 +75,11 @@ export function ipcListeners(window: BrowserWindow | null) {
                     type: 'toggle',
                     enabled: Variables.getInstance().spinbot.enabled,
                     components: [
+                        {
+                            id: 'hotkeys',
+                            type: 'listener',
+                            value: Variables.getInstance().spinbot.hotkeys
+                        },
                         {
                             id: 'speed',
                             type: 'slider',
@@ -207,6 +219,10 @@ export function ipcListeners(window: BrowserWindow | null) {
     //         event.reply('onlinePlayersResponse', onlinePlayers);
     //     }
     // });
+
+    ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
+        Variables.getInstance()[cheatId][componentId].hotkeys = JSON.parse(newValue);
+    });
 
     ipcMain.on('getCheats', (event) => {
         event.reply('getCheatsResponse', cheats);

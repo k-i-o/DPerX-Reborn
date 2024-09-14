@@ -11,6 +11,8 @@ export class Aimbot implements IBase {
     maxDistance: number = 999;
     autoFire: boolean = false;
 
+    hotkeys: any[] = [];
+
     execute(delta: number): void {
         const systemVar = Variables.getInstance().system;
         const localplayer = Server.getInstance().localPlayer;

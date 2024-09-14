@@ -3,11 +3,13 @@
 import Slider from 'primevue/slider';
 import Checkbox from 'primevue/checkbox';
 import ColorPicker from 'primevue/colorpicker';
+import InputText from 'primevue/inputtext';
 
 // GENERAL IMPORTS
 import { Ref, ref } from 'vue';
 import { IMenuCheatCategory } from '../../interfaces/IMenuCheatCategory';
 import { ISetting } from '../../interfaces/ISetting';
+import { IMenuCheatItemComponent } from 'src/interfaces/IMenuCheatItemComponent';
 // import tinycolor from 'tinycolor2';
 
 let categories: Ref<IMenuCheatCategory[]> = ref([]);
@@ -235,6 +237,52 @@ const selectSetting = (settingId: {id:string,icon:string,options:any[]}) => {
     activeSetting.value = settingId;
 };
 
+const enableListener = (cheatId: string, component: IMenuCheatItemComponent) => {
+    let originalValue = { ...component.value }; 
+    let keysPressed: {name: string, code: number}[] = []; 
+
+    component.value = { 
+        keyIds: [], 
+        display: 'Listening...' 
+    }; 
+
+    const listener = (event: KeyboardEvent) => {        
+        if (event.key === 'Escape') {
+            keysPressed = []; 
+            component.value = { 
+                keyIds: originalValue.keyIds || [], 
+                display: originalValue.display || '' 
+            }; 
+            document.removeEventListener('keydown', listener);
+            return;
+        }
+
+        if (event.key === 'Enter') {
+            originalValue = { ...component.value }; 
+            keysPressed = []; 
+            document.removeEventListener('keydown', listener); 
+            send('newHotkeys', {cheatId, componentId: component.id, newValue: JSON.stringify(component.value.keyIds)});
+            return; 
+        }
+
+        if (keysPressed.map(k=>k.code).includes(event.keyCode)) {
+            return;
+        }
+
+        if (keysPressed.length >= 3) {
+            keysPressed = []; 
+        }
+
+        keysPressed.push({name: event.key, code: event.keyCode});
+        component.value = { 
+            keyIds: keysPressed.map(k => k.code),
+            display: keysPressed.map(k => k.name).join(' + ').toUpperCase() 
+        };
+    };
+
+    document.addEventListener('keydown', listener);
+};
+
 send('getCheats');
 window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory[]) => {
     categories.value = data;
@@ -319,6 +367,14 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
                                 </span>
                                 <div class="input slider">
                                     <Slider v-model="component.value" v-on:change="updateValue(item.id, component.id, component.value)" min=0 max=999 />
+                                </div>
+                            </div>
+                            <div class="listener-component" v-if="component.type == 'listener'">
+                                <span>
+                                    {{ component.id[0].toUpperCase() + component.id.slice(1) }} (Enter to confirm)
+                                </span>
+                                <div class="input listener">
+                                    <button v-on:click="enableListener(item.id, component)" @keydown.enter.prevent>{{ component.value.display || "Click to start listener" }}</button>
                                 </div>
                             </div>
                         </div>
