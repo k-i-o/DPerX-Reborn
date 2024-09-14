@@ -8,33 +8,190 @@ import ColorPicker from 'primevue/colorpicker';
 import { Ref, ref } from 'vue';
 import { IMenuCheatCategory } from '../../interfaces/IMenuCheatCategory';
 import { ISetting } from '../../interfaces/ISetting';
+// import tinycolor from 'tinycolor2';
 
 let categories: Ref<IMenuCheatCategory[]> = ref([]);
 let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
 let settingsVisible: Ref<boolean> = ref(false);
-const settings: ISetting[] = [
+    
+    function rgbToHex(color: string) {
+    if (color.startsWith('#')) {
+        return color;
+    }
+
+    const rgb = color.match(/\d+/g);
+    if (!rgb) return color;
+
+    const hex = rgb
+        .slice(0, 3)
+        .map((value: string) => {
+            const hexValue = parseInt(value).toString(16);
+            return hexValue.length === 1 ? '0' + hexValue : hexValue;
+        })
+        .join('');
+
+    return `#${hex}`;
+}
+
+let settings: Ref<ISetting[]> = ref([
     {
         id: 'Appearance',
-        icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-paint"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 2a3 3 0 0 1 2.995 2.824l.005 .176a3 3 0 0 1 3 3a6 6 0 0 1 -5.775 5.996l-.225 .004h-4l.15 .005a2 2 0 0 1 1.844 1.838l.006 .157v4a2 2 0 0 1 -1.85 1.995l-.15 .005h-2a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-4a2 2 0 0 1 1.85 -1.995l.15 -.005v-1a1 1 0 0 1 .883 -.993l.117 -.007h5a4 4 0 0 0 4 -4a1 1 0 0 0 -.883 -.993l-.117 -.007l-.005 .176a3 3 0 0 1 -2.819 2.819l-.176 .005h-10a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h10z" /></svg>',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-paint"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 2a3 3 0 0 1 2.995 2.824l.005 .176a3 3 0 0 1 3 3a6 6 0 0 1 -5.775 5.996l-.225 .004h-4l.15 .005a2 2 0 0 1 1.844 1.838l.006 .157v4a2 2 0 0 1 -1.85 1.995l-.15 .005h-2a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-4a2 2 0 0 1 1.85 -1.995l.15 -.005v-1a1 1 0 0 1 .883 -.993l.117 -.007h5a4 4 0 0 0 4 -4a1 1 0 0 0 -.883 -.993l-.117 -.007l-.005 .176a3 3 0 0 1 -2.819 2.819l-.176 .005h-10a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h10z" /></svg>',
         options: [
             {
-                id: 'main color',
-                type: 'color_picker',
-                value: '#ffffff'
+                id: 'reset colors',
+                type: 'button',
+                onChange: () => {
+                    const root = document.documentElement;
+
+                    const properties = [
+                        '--c-accent',
+                        '--c-accent-variant',
+                        '--c-accent-variant2',
+                        '--c-s',
+                        '--c-s-variant',
+                        '--c-s-variant2',
+                        '--c-t',
+                        '--c-t-variant',
+                        '--c-t-variant2',
+                        '--c-t-variant3',
+                        '--c-t-variant4'
+                    ];
+
+                    properties.forEach(prop => {
+                        root.style.removeProperty(prop);
+                    });
+
+                    settings.value[0].options[1].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim());
+                    settings.value[0].options[2].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim());
+                    settings.value[0].options[3].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim());
+                    settings.value[0].options[4].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim());
+                    settings.value[0].options[5].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim());
+                    settings.value[0].options[6].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim());
+                    settings.value[0].options[7].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim());
+                    settings.value[0].options[8].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim());
+                    settings.value[0].options[9].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim());
+                    settings.value[0].options[10].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim());
+                    settings.value[0].options[11].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()); 
+                    
+                    activeSetting.value = settings.value.filter((s)=>s.id == activeSetting.value?.id)[0];
+                },
             },
             {
-                id: 'main color',
+                id: 'main color 1',
                 type: 'color_picker',
-                value: '#ffffff'
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-accent', color);
+                },
             },
             {
-                id: 'main color',
+                id: 'main color 2',
                 type: 'color_picker',
-                value: '#ffffff'
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-accent-variant', color);
+                },
+            },
+            {
+                id: 'main color 3',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-accent-variant2', color);
+                },
+            },
+            {
+                id: 'secondary color 1',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-s', color);
+                },
+            },
+            {
+                id: 'secondary color 2',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-s-variant', color);
+                },
+            },
+            {
+                id: 'secondary color 3',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-s-variant2', color);
+                },
+            },
+            {
+                id: 'tertiary color 1',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-t', color);
+                },
+            },
+            {
+                id: 'tertiary color 2',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-t-variant', color);
+                },
+            },
+            {
+                id: 'tertiary color 3',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-t-variant2', color);
+                },
+            },
+            {
+                id: 'tertiary color 4',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-t-variant3', color);
+                },
+            },
+            {
+                id: 'tertiary color 5',
+                type: 'color_picker',
+                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()),
+                onChange: (value: any) => {
+                    const color = `#${value}`;
+                    const root = document.documentElement;
+                    root.style.setProperty('--c-t-variant4', color);
+                },
             }
         ]
     }
-];
+]);
+
+
 let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
 
 const send = window.electron.ipcRenderer.send;
@@ -71,7 +228,7 @@ send('getCheats');
 window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory[]) => {
     categories.value = data;
     activeCategory.value = categories.value[0];
-    activeSetting.value = settings[0];
+    activeSetting.value = settings.value[0];
 });
 </script>
 
@@ -114,7 +271,7 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
 
             <div class="options">
 
-                <div class="option" v-if="activeCategory.items.length==0">
+                <div class="option noavaiable" v-if="activeCategory.items.length==0">
                     No Cheat Avaiable There
                 </div>
     
@@ -181,7 +338,7 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
             <div class="setting" :class="activeSetting?.id == setting.id ? 'active' : ''" v-on:click="selectSetting(setting)" v-for="setting in settings">
                 <div class="active-bar"></div>
                 <div class="icon" v-html="activeSetting?.icon"></div>
-                <span class="title">Apparence</span>
+                <span class="title">{{ setting.id }}</span>
             </div>
         </div>
 
@@ -203,12 +360,17 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
 
             <div class="settings-options" v-if="activeSetting && activeSetting?.options.length > 0">
                 <div class="settings-option" v-for="option in activeSetting.options">
+                    <button class="button-component" v-if="option.type == 'button'" v-on:click="option.onChange()">
+                        <span>
+                            {{ option.id[0].toUpperCase() + option.id.slice(1) }}
+                        </span>
+                    </button>
                     <div class="colorpicker-component" v-if="option.type == 'color_picker'">
                         <span>
                             {{ option.id[0].toUpperCase() + option.id.slice(1) }}
                         </span>
                         <div class="input colorpicker">
-                            <ColorPicker v-model="option.value" />
+                            <ColorPicker v-model="option.value" v-on:change="option.onChange(option.value)" format="hex" />
                         </div>
                     </div>
                 </div>

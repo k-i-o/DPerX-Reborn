@@ -9,12 +9,26 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: @c-t;
+    background: var(--c-t);
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: @c-accent;
+    background-color: var(--c-accent);
     border-radius: 20px;
+}
+
+:root {
+    --c-accent: fade(@c-accent, 99%);
+    --c-accent-variant: fade(@c-accent, 90%);
+    --c-accent-variant2: fade(@c-accent, 70%);
+    --c-s: fade(@c-s, 99%);
+    --c-s-variant: fade(@c-s, 15%);
+    --c-s-variant2: fade(@c-s, 50%);
+    --c-t: fade(@c-t, 99%);
+    --c-t-variant: lighten(@c-t, 6%);
+    --c-t-variant2: fade(@c-t, 80%);
+    --c-t-variant3: fade(lighten(@c-t, 13%), 90%);
+    --c-t-variant4: lighten(@c-t, 5%);
 }
 
 html, body {
@@ -22,8 +36,8 @@ html, body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-color: @c-t-variant;
-    color: white;
+    background-color: var(--c-t-variant);
+    color: var(--c-s);
     user-select: none;
     padding: 0;
     margin: 0;
@@ -34,24 +48,23 @@ html, body {
     border-width: 3px; 
     border-style: solid;    
     animation: borderMove 12s 0s infinite alternate-reverse;
-    -webkit-user-select: none;
     -webkit-app-region: drag;
 
     @keyframes borderMove {
         0% {
-          border-image: linear-gradient(to bottom right, @c-accent, transparent 65%) 1;
+          border-image: linear-gradient(to bottom right, var(--c-accent), transparent 65%) 1;
         }
         25% {
-          border-image: linear-gradient(to right, @c-accent, transparent 80%) 1;
+          border-image: linear-gradient(to right, var(--c-accent), transparent 80%) 1;
         }
         50% {
-          border-image: linear-gradient(to top right, @c-accent, transparent 80%) 1;
+          border-image: linear-gradient(to top right, var(--c-accent), transparent 80%) 1;
         }
         75% {
-          border-image: linear-gradient(to top left, @c-accent, transparent 80%) 1;
+          border-image: linear-gradient(to top left, var(--c-accent), transparent 80%) 1;
         }
         100% {
-          border-image: linear-gradient(to bottom left, @c-accent, transparent 65%) 1;
+          border-image: linear-gradient(to bottom left, var(--c-accent), transparent 65%) 1;
         } 
     } 
 
@@ -66,14 +79,13 @@ html, body {
     }
 
     a, input, .input, button, .p-colorpicker-panel {
-        -webkit-user-select: auto;
         -webkit-app-region: no-drag;
     }
 
     button {
         border: none;
         padding: 10px;
-        background-color: fade(@c-t, 80%);
+        background-color: var(--c-t-variant2);
         cursor: pointer;
     }
 
@@ -83,7 +95,7 @@ html, body {
         height: 100vh;
         width: 100vw;
         padding: 25px;
-        background-color: @c-t-variant;
+        background-color: var(--c-t-variant);
         border-radius: @r-border;
 
         .categories, .settings {
@@ -93,13 +105,12 @@ html, body {
             min-width: @w-menu;
             width: @w-menu;
             height: 100%; 
-            background-color: @c-t;
+            background-color: var(--c-t-variant2);
             border-radius: @r-border;
             padding: 15px;
             overflow-y: auto;
             overflow-x: hidden;
-            -webkit-app-region: no-drag;
-            transition: all .2s 0s ease-in-out;
+            transition: width .2s 0s ease-in-out, min-width .2s 0s ease-in-out;
 
             @media @mobile {
                 min-width: @w-menu-small;
@@ -139,12 +150,13 @@ html, body {
             
             .attach {
                 border-radius: @r-border;
-                background-color: @c-accent;
+                background-color: var(--c-accent);
                 padding: 10px 5px;
-                transition: all .2s 0s ease-in-out; 
+                transition: background-color .2s 0s ease-in-out; 
+                color: @c-s;
 
                 &:hover {
-                    background-color: fade(@c-accent, 70%);
+                    background-color: var(--c-accent-variant2);
                 }
 
                 .icon {
@@ -155,12 +167,17 @@ html, body {
                     @media @mobile {
                         display: flex;
                     }
+
+                    svg {
+                        fill: var(--c-s);
+                    }
                 }
 
                 span {
                     text-transform: uppercase;
                     font-weight: bold;
                     font-size: 1.5em;
+                    color: var(--c-s);
 
                     @media @mobile {
                         display: none;
@@ -172,7 +189,7 @@ html, body {
             .horizontal-separator {
                 width: 100%;
                 height: 2px;
-                background-color: fade(@c-s, 15%);
+                background-color: var(--c-s-variant);
                 border-radius: 2px;
             }
 
@@ -186,27 +203,26 @@ html, body {
                 gap: 8px;
                 border-radius: @r-border;
                 cursor: pointer;
-                transition: all .2s 0s ease-in-out;
-                -webkit-user-select: auto;
+                transition: background-color .2s 0s ease-in-out;
                 -webkit-app-region: no-drag;
 
                 &:hover {
-                    background-color: lighten(@c-t, 5%);
+                    background-color: var(--c-t-variant4);
                 }
 
                 .active-bar {
                     opacity: 0;
-                    background-color: @c-accent;
+                    background-color: var(--c-accent);
                     height: 100%;
                     min-width: 2px;
                     width: 2px;
                     border-radius: 2px;
-                    transition: all .2s 0.1s ease-in-out;
+                    transition: opacity .2s 0.1s ease-in-out;
                 }
                 
                 span {
-                    color: fade(@c-s, 50%);
-                    transition: all .2s 0s ease-in-out;
+                    color: var(--c-s-variant2);
+                    transition: color .2s 0s ease-in-out;
                 }
 
                 .icon {
@@ -215,19 +231,19 @@ html, body {
                     align-items: center;
                     padding-right: 2px;
                     opacity: .6;
-                    transition: all .2s 0s ease-in-out;
+                    transition: opacity .2s 0s ease-in-out;
                 }
 
                 &.active {
-                    color: @c-s;
-                    background-color: fade(lighten(@c-t, 13%), 90%);
+                    color: var(--c-s);
+                    background-color: var(--c-t-variant3);
 
                     .active-bar {
                         opacity: 1;
                     }
 
                     span {
-                        color: @c-s; 
+                        color: var(--c-s); 
                     }
 
                     .icon {
@@ -277,14 +293,12 @@ html, body {
                     .avatar {
                         margin: 5px;
                         border-radius: 50%;
-                        border: 2px solid fade(lighten(@c-t, 13%), 90%);
                         box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.243);
                         width: 70px; 
                         height: 70px;
                         overflow: hidden;
                         position: relative;
                         cursor: pointer;
-                        -webkit-user-select: auto;
                         -webkit-app-region: no-drag;
 
                         img {
@@ -312,7 +326,7 @@ html, body {
                                 width: 60%;
                                 height: 60%;
                                 position: relative;
-                                stroke: @c-accent;
+                                stroke: var(--c-accent);
                             }
                         }
 
@@ -340,11 +354,14 @@ html, body {
                     justify-content: center;                    
                     flex-direction: column;
                     gap: 20px; 
-                    background-color: fade(@c-t, 80%);
+                    background-color: var(--c-t-variant2);
                     border-radius: @r-border;
                     padding: 15px;
-                    -webkit-user-select: auto;
                     -webkit-app-region: no-drag;
+                    
+                    &.noavaiable {
+                        opacity: .6;
+                    }
 
                     .toggle, .run {
                         display: flex;
@@ -358,14 +375,14 @@ html, body {
                         justify-content: space-between;
 
                         .execute {
-                            background-color: fade(lighten(@c-t, 13%), 90%);
+                            background-color: var(--c-t-variant3);
                             border-radius: @r-border;
                             padding: 9px 15px;
                             border: 2px solid transparent;
-                            transition: all .2s 0s ease-in-out;
+                            transition: border .2s 0s ease-in-out;
 
                             &:hover {
-                                border: 2px solid fade(@c-accent, 70%) !important;
+                                border: 2px solid var(--c-accent-variant2) !important;
                             }
                         }
                     }
@@ -416,7 +433,7 @@ html, body {
                 
                 width: 100%;
                 height: @h-settings-topbar;
-                background-color: fade(@c-t, 80%);
+                background-color: var(--c-t-variant2);
                 border-radius: @r-border;
                 padding: 10px; 
                 display: flex;
@@ -430,11 +447,11 @@ html, body {
                     width: @button-size;
                     height: @button-size;
                     border-radius: @r-border;
-                    transition: all .2s 0s ease-in-out;
+                    transition: background-color .2s 0s ease-in-out;
                     -webkit-app-region: no-drag;
                     
                     &:hover {
-                        background-color: fade(lighten(@c-t, 13%), 90%);
+                        background-color: var(--c-t-variant3);
                     }
                 }
                 
@@ -453,11 +470,11 @@ html, body {
                         width: @button-size;
                         height: @button-size;
                         border-radius: @r-border;
-                        transition: all .2s 0s ease-in-out;
+                        transition: background-color .2s 0s ease-in-out;
                         -webkit-app-region: no-drag;
                         
                         &:hover {
-                            background-color: fade(lighten(@c-t, 13%), 90%);
+                            background-color: var(--c-t-variant3);
                         }                
                     }
                 }
@@ -470,9 +487,25 @@ html, body {
 
                 .settings-option {
                     width: 49%;
-                    background-color: fade(@c-t, 80%);
+                    background-color: var(--c-t-variant2);
                     padding: 15px;
                     border-radius: @r-border;
+                    -webkit-app-region: no-drag;
+                    overflow: hidden;
+
+                    &:has(.button-component) {
+                        padding: 0;
+                    }
+
+                    .button-component {
+                        width: 100%;
+                        height: 100%;
+                        transition: background-color .2s 0s ease-in-out;
+
+                        &:hover {
+                            background-color: var(--c-t-variant3);
+                        }
+                    }
 
                     .colorpicker-component {
                         display: flex;
