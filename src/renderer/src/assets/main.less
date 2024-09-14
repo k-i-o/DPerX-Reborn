@@ -95,8 +95,17 @@ html, body {
         height: 100vh;
         width: 100vw;
         padding: 25px;
+        padding-right: 12px;
         background-color: var(--c-t-variant);
         border-radius: @r-border;
+
+        .horizontal-separator {
+            width: 100%;
+            min-height: 2px;
+            background-color: var(--c-s-variant);
+            border-radius: 2px;
+            opacity: .8;
+        }
 
         .categories, .settings {
             display: flex;
@@ -186,13 +195,6 @@ html, body {
 
             }
 
-            .horizontal-separator {
-                width: 100%;
-                height: 2px;
-                background-color: var(--c-s-variant);
-                border-radius: 2px;
-            }
-
             .category, .setting {
                 width: 100%;
                 height: 50px;
@@ -268,6 +270,7 @@ html, body {
             width: 100%;
             height: 100%;
             overflow-y: auto;
+            padding-right: 13px;
 
             .header {
                 display: flex;
@@ -353,7 +356,7 @@ html, body {
                     align-items: flex-start;
                     justify-content: center;                    
                     flex-direction: column;
-                    gap: 20px; 
+                    gap: 15px; 
                     background-color: var(--c-t-variant2);
                     border-radius: @r-border;
                     padding: 15px;
@@ -362,6 +365,17 @@ html, body {
                     &.noavaiable {
                         opacity: .6;
                     }
+
+                    // .separator-container {
+                    //     display: flex;
+                    //     justify-content: center;
+                    //     align-items: center;
+                    //     width: 100%;
+
+                    //     .horizontal-separator {
+                    //         width: 90%;
+                    //     }
+                    // }
 
                     .toggle, .run {
                         display: flex;
@@ -427,6 +441,7 @@ html, body {
             height: 100%;
             overflow-y: auto;
             gap: 20px;
+            padding-right: 13px;
 
             .top-header {
                 @button-size: @h-settings-topbar - 20px; 
@@ -438,6 +453,10 @@ html, body {
                 padding: 10px; 
                 display: flex;
                 justify-content: space-between;
+                top: 0;
+                position: sticky;
+                backdrop-filter: blur(10px);
+                z-index: 999;
                 
                 .back {
                     display: flex;
@@ -481,12 +500,16 @@ html, body {
             }
 
             .settings-options {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px; 
+                
+                @media @tablet{ 
+                    grid-template-columns: 1fr;
+                }
 
                 .settings-option {
-                    width: 49%;
+                    width: 100%;
                     background-color: var(--c-t-variant2);
                     padding: 15px;
                     border-radius: @r-border;

@@ -188,6 +188,17 @@ let settings: Ref<ISetting[]> = ref([
                 },
             }
         ]
+    },
+    {
+        id: 'Credits',
+        icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>',
+        options: [
+            {
+                id: 'Credits',
+                type: 'text',
+                value: `By kiocode`
+            }
+        ]
     }
 ]);
 
@@ -288,6 +299,10 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
                         </button>
                     </div>
 
+                    <!-- <div class="separator-container">
+                        <div class="horizontal-separator" v-if="item.components.length > 0"></div>
+                    </div> -->
+
                     <div class="components" v-if="item.components.length > 0">
                         <div class="component" v-for="component in item.components">
                             <div class="toggle-component" v-if="component.type == 'toggle'">
@@ -337,7 +352,7 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
 
             <div class="setting" :class="activeSetting?.id == setting.id ? 'active' : ''" v-on:click="selectSetting(setting)" v-for="setting in settings">
                 <div class="active-bar"></div>
-                <div class="icon" v-html="activeSetting?.icon"></div>
+                <div class="icon" v-html="setting.icon"></div>
                 <span class="title">{{ setting.id }}</span>
             </div>
         </div>
@@ -372,6 +387,9 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
                         <div class="input colorpicker">
                             <ColorPicker v-model="option.value" v-on:change="option.onChange(option.value)" format="hex" />
                         </div>
+                    </div>
+                    <div class="text-component" v-if="option.type == 'text'">
+                        {{ option.value }}
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { Notification } from 'electron';
 
 export class Spoofer implements IBase {
 
-    backup: boolean = false;
+    backup: boolean = true;
 
     execute() {
         const desktopPath = this.getDesktopPath();
