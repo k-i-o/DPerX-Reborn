@@ -1,4 +1,4 @@
 export interface IBase {
-    enabled: boolean;
+    enabled?: boolean;
     execute(delta: number): void;
 }

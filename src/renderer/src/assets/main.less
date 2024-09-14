@@ -1,6 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap');
 
 @import '../assets/variables.less';
+@import '../assets/custom-theme.less';
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: @c-t;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: @c-accent;
+    border-radius: 20px;
+}
 
 html, body {
     display: flex;
@@ -14,27 +29,30 @@ html, body {
     margin: 0;
     height: 100%;
     width: 100%;
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
     font-family: "SUSE", sans-serif;
     border-radius: @r-border;
     border-width: 3px; 
     border-style: solid;    
     animation: borderMove 12s 0s infinite alternate-reverse;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
 
     @keyframes borderMove {
         0% {
-            border-image: linear-gradient(to bottom right, @c-accent, transparent 65%) 1;
+          border-image: linear-gradient(to bottom right, @c-accent, transparent 65%) 1;
         }
-        40% {
-            border-image: linear-gradient(to bottom right, @c-accent, transparent 80%) 1;
+        25% {
+          border-image: linear-gradient(to right, @c-accent, transparent 80%) 1;
         }
-        60% {
-            border-image: linear-gradient(to top left, @c-accent, transparent 80%) 1;
+        50% {
+          border-image: linear-gradient(to top right, @c-accent, transparent 80%) 1;
+        }
+        75% {
+          border-image: linear-gradient(to top left, @c-accent, transparent 80%) 1;
         }
         100% {
-            border-image: linear-gradient(to top left, @c-accent, transparent 65%) 1;
-        }
+          border-image: linear-gradient(to bottom left, @c-accent, transparent 65%) 1;
+        } 
     } 
 
     h1, h2, h3, h4, h5, h6 {
@@ -47,7 +65,7 @@ html, body {
         padding: 0;
     }
 
-    a, input, .input, button {
+    a, input, .input, button, .p-colorpicker-panel {
         -webkit-user-select: auto;
         -webkit-app-region: no-drag;
     }
@@ -68,31 +86,87 @@ html, body {
         background-color: @c-t-variant;
         border-radius: @r-border;
 
-        .categories {
+        .categories, .settings {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            min-width: @w-menu;
             width: @w-menu;
-            height: 100%;
-            background-color: fade(@c-t, 80%);
+            height: 100%; 
+            background-color: @c-t;
             border-radius: @r-border;
             padding: 15px;
             overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-app-region: no-drag;
+            transition: all .2s 0s ease-in-out;
 
+            @media @mobile {
+                min-width: @w-menu-small;
+                width: @w-menu-small;
+            }
+
+            h1 {
+                width: 100%;
+                text-align: center;
+            }
+
+            
+            .setting-title {
+                display: block;
+                
+                @media @mobile {
+                    display: none;
+                }
+            }
+            
+            .setting-page-icon {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                transition: all .3s 0s ease-in-out;
+
+                @media @mobile {
+                    display: flex;
+                }
+
+                svg {
+                    width: 40px;
+                    height: 40px;
+                }
+
+            }
+            
             .attach {
                 border-radius: @r-border;
                 background-color: @c-accent;
+                padding: 10px 5px;
                 transition: all .2s 0s ease-in-out; 
-
-                .icon {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
 
                 &:hover {
                     background-color: fade(@c-accent, 70%);
                 }
+
+                .icon {
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    @media @mobile {
+                        display: flex;
+                    }
+                }
+
+                span {
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    font-size: 1.5em;
+
+                    @media @mobile {
+                        display: none;
+                    }
+                }
+
             }
 
             .horizontal-separator {
@@ -102,7 +176,7 @@ html, body {
                 border-radius: 2px;
             }
 
-            .category {
+            .category, .setting {
                 width: 100%;
                 height: 50px;
                 padding: 9px 6px;
@@ -124,6 +198,7 @@ html, body {
                     opacity: 0;
                     background-color: @c-accent;
                     height: 100%;
+                    min-width: 2px;
                     width: 2px;
                     border-radius: 2px;
                     transition: all .2s 0.1s ease-in-out;
@@ -161,6 +236,13 @@ html, body {
 
                 }
 
+                
+                @media @mobile {
+                    span {
+                        display: none;
+                    }
+                }
+
             }
         }
 
@@ -180,7 +262,7 @@ html, body {
                     display: flex;
                     flex-direction: column;
                     gap: 5px;
-                    width: 60%;
+                    width: 70%;
 
                     .description {
                         opacity: .7;
@@ -191,8 +273,6 @@ html, body {
                     display: flex;
                     justify-content: flex-end;
                     gap: 10px;
-                    -webkit-user-select: auto;
-                    -webkit-app-region: no-drag;
 
                     .avatar {
                         margin: 5px;
@@ -204,6 +284,8 @@ html, body {
                         overflow: hidden;
                         position: relative;
                         cursor: pointer;
+                        -webkit-user-select: auto;
+                        -webkit-app-region: no-drag;
 
                         img {
                             width: 100%;
@@ -250,23 +332,42 @@ html, body {
                 flex-direction: column;
                 gap: 10px;
                 padding: 20px 0;
+                -webkit-app-region: no-drag;
 
                 .option {
                     display: flex;
                     align-items: flex-start;
                     justify-content: center;                    
                     flex-direction: column;
-                    gap: 10px; 
+                    gap: 20px; 
                     background-color: fade(@c-t, 80%);
                     border-radius: @r-border;
                     padding: 15px;
                     -webkit-user-select: auto;
                     -webkit-app-region: no-drag;
 
-                    .toggle {
+                    .toggle, .run {
                         display: flex;
-                        gap: 5px; 
+                        gap: 10px; 
                         height: 100%;
+                    }
+
+                    .run {
+                        width: 100%;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .execute {
+                            background-color: fade(lighten(@c-t, 13%), 90%);
+                            border-radius: @r-border;
+                            padding: 9px 15px;
+                            border: 2px solid transparent;
+                            transition: all .2s 0s ease-in-out;
+
+                            &:hover {
+                                border: 2px solid fade(@c-accent, 70%) !important;
+                            }
+                        }
                     }
 
                     .components {
@@ -281,8 +382,19 @@ html, body {
                             flex-direction: column;
                             gap: 10px;
 
-                            .input {
+                            .input.slider {
                                 width: 100%;
+                            } 
+
+                            .toggle-component {
+                                display: flex;
+                                gap: 10px;
+                            }
+
+                            .slider-component {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 10px;
                             }
                         }
                     }
@@ -290,6 +402,90 @@ html, body {
                 
             }
         }
+
+        .settings-view {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            gap: 20px;
+
+            .top-header {
+                @button-size: @h-settings-topbar - 20px; 
+                
+                width: 100%;
+                height: @h-settings-topbar;
+                background-color: fade(@c-t, 80%);
+                border-radius: @r-border;
+                padding: 10px; 
+                display: flex;
+                justify-content: space-between;
+                
+                .back {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    width: @button-size;
+                    height: @button-size;
+                    border-radius: @r-border;
+                    transition: all .2s 0s ease-in-out;
+                    -webkit-app-region: no-drag;
+                    
+                    &:hover {
+                        background-color: fade(lighten(@c-t, 13%), 90%);
+                    }
+                }
+                
+                .window-options {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    -webkit-app-region: no-drag;
+                    
+                    >div {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        width: @button-size;
+                        height: @button-size;
+                        border-radius: @r-border;
+                        transition: all .2s 0s ease-in-out;
+                        -webkit-app-region: no-drag;
+                        
+                        &:hover {
+                            background-color: fade(lighten(@c-t, 13%), 90%);
+                        }                
+                    }
+                }
+            }
+
+            .settings-options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+
+                .settings-option {
+                    width: 49%;
+                    background-color: fade(@c-t, 80%);
+                    padding: 15px;
+                    border-radius: @r-border;
+
+                    .colorpicker-component {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                }
+            }
+        }
     }
 
 }
+
+
+
+

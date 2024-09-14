@@ -2,6 +2,7 @@ import { Aimbot } from "../cheats/Aimbot";
 import { Balancer } from "../cheats/Balancer";
 import { ISystemVariables } from "../../../interfaces/ISystemVariables";
 import { Spinbot } from "../cheats/Spinbot";
+import { Spoofer } from "../cheats/Spoofer";
 
 export class Variables {
 
@@ -9,6 +10,7 @@ export class Variables {
     spinbot: Spinbot = new Spinbot();
     aimbot: Aimbot = new Aimbot();
     balancer: Balancer = new Balancer();
+    spoofer: Spoofer = new Spoofer();
 
     private static instance: Variables;
     private constructor() {}

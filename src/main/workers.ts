@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import {  openProcess, PTR, readMemory } from '../../IOMemoryUtility/memoryjs';
 import { Notification } from 'electron/main';
 import { Offsets } from './models/singletons/Offsets';
@@ -39,7 +39,7 @@ export function updater() {
     });
 }
 
-export function ipcListeners() {
+export function ipcListeners(window: BrowserWindow | null) {
     const cheats: IMenuCheatCategory[] = [
         {
             icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-currency"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M4 4l3 3" /><path d="M20 4l-3 3" /><path d="M4 20l3 -3" /><path d="M20 20l-3 -3" /></svg>',
@@ -49,13 +49,9 @@ export function ipcListeners() {
                 {
                     id: 'aimbot',
                     title: 'Enable Aimbot',
+                    needGame: true,
+                    type: 'toggle',
                     enabled: Variables.getInstance().aimbot.enabled,
-                    components: []
-                },
-                {
-                    id: 'balancer',
-                    title: 'Enable Auto Balancer',
-                    enabled: Variables.getInstance().balancer.enabled,
                     components: []
                 }
             ]
@@ -68,6 +64,8 @@ export function ipcListeners() {
                 {
                     id: 'spinbot',
                     title: 'Enable Spinbot',
+                    needGame: true,
+                    type: 'toggle',
                     enabled: Variables.getInstance().spinbot.enabled,
                     components: [
                         {
@@ -81,6 +79,14 @@ export function ipcListeners() {
                             value: Variables.getInstance().spinbot.distance
                         }
                     ]
+                },
+                {
+                    id: 'balancer',
+                    title: 'Enable Auto Balancer',
+                    needGame: true,
+                    type: 'toggle',
+                    enabled: Variables.getInstance().balancer.enabled,
+                    components: []
                 }
             ]
         },
@@ -108,12 +114,19 @@ export function ipcListeners() {
             title: 'Anti-Detection & Spoofing',
             description: 'Tools to protect your identity and avoid detection by anti-cheat systems.',
             items: [
-                // {
-                //     id: 'spoofer',
-                //     title: 'Run Spoofer',
-                //     enabled: Variables.getInstance().spoofer.enabled,
-                //     components: []
-                // }
+                {
+                    id: 'spoofer',
+                    title: 'Run Spoofer',
+                    needGame: false,
+                    type: 'run',
+                    components: [
+                        {
+                            id: 'backup',
+                            type: 'toggle',
+                            value: Variables.getInstance().spoofer.backup
+                        },
+                    ]
+                }
             ]
         },
         {
@@ -136,7 +149,22 @@ export function ipcListeners() {
             ]
         }
     ];
-    
+
+    const proceed = (needGame: boolean): boolean => {
+        if((needGame && Variables.getInstance().system.gameAttached) || Variables.getInstance().system.gameAttached) {
+            return true;
+        } 
+        
+        return false;
+    }
+
+    ipcMain.on('minimize', (_) => {
+        window?.minimize();
+    });
+
+    ipcMain.on('close', (_) => {
+        window?.close();
+    });
 
     ipcMain.on('attach', (_) => {
 
@@ -188,14 +216,27 @@ export function ipcListeners() {
         Variables.getInstance()[cheatId][componentId] = newValue;
     });
 
-    ipcMain.on('enableCheat', async (_, { type, status }) => {
+    ipcMain.on('runCheat', async (_, { type, needGame }) => {
 
-        if(!Variables.getInstance().system.gameAttached) {
-            console.log("No game attached");
-            return;
+        proceed(needGame);
+
+        try {
+            switch (type) {
+                case "spoofer":
+                    Variables.getInstance().spoofer.execute();
+                    break;
+
+                default:
+                    console.log("Unknown type");
+            }
+        } catch (error) {
+            console.error("Error enabling cheat:", error);
         }
+    });
 
-        console.debug("Toggling", type);
+    ipcMain.on('enableCheat', async (_, { type, status, needGame }) => {
+
+        proceed(needGame);
 
         try {
             switch (type) {

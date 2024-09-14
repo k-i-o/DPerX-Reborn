@@ -1,0 +1,50 @@
+/* CUSTOM CHECKBOX */
+.p-checkbox-box {
+    background-color: fade(lighten(@c-t, 13%), 90%) !important;
+    border: 2px solid transparent !important;
+    transition: all .2s 0s ease-in-out !important;
+}
+
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
+    border: 2px solid fade(@c-accent, 70%) !important;
+}
+
+.p-checkbox-checked .p-checkbox-box {
+    background-color: @c-accent !important;
+    border: 2px solid transparent !important;
+}
+
+.p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
+    border: 0 !important;
+    background-color: fade(@c-accent, 90%) !important;
+}
+
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:focus-visible) .p-checkbox-box {
+    outline-color: @c-accent !important;
+}
+
+/* CUSTOM SLIDER */
+.p-slider-range {
+    background-color: @c-accent !important;
+    border-radius: 3px !important;
+}
+
+.p-slider-handle:focus-visible {
+    outline: 0 !important;
+}
+
+/* CUSTOM COLOR PICKER */
+.p-colorpicker-preview:enabled:focus-visible {
+    outline: none !important;
+    border: 0 !important;
+}
+
+.p-colorpicker {
+    border: 2px solid fade(white, 20%) !important;
+    border-radius: 8px !important;
+    transition: all .2s 0s ease-in-out;
+
+    &:hover {
+        border: 2px solid fade(@c-accent, 90%) !important;
+    }
+}
