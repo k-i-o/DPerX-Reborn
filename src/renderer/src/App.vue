@@ -10,13 +10,17 @@ import { Ref, ref } from 'vue';
 import { IMenuCheatCategory } from '../../interfaces/IMenuCheatCategory';
 import { ISetting } from '../../interfaces/ISetting';
 import { IMenuCheatItemComponent } from 'src/interfaces/IMenuCheatItemComponent';
-// import tinycolor from 'tinycolor2';
+import { title } from 'process';
 
+let offsetsList: any;
 let categories: Ref<IMenuCheatCategory[]> = ref([]);
 let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
 let settingsVisible: Ref<boolean> = ref(false);
+let settings: Ref<ISetting[]> = ref([]);
+let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
+
     
-    function rgbToHex(color: string) {
+function rgbToHex(color: string) {
     if (color.startsWith('#')) {
         return color;
     }
@@ -34,178 +38,6 @@ let settingsVisible: Ref<boolean> = ref(false);
 
     return `#${hex}`;
 }
-
-let settings: Ref<ISetting[]> = ref([
-    {
-        id: 'Appearance',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-paint"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 2a3 3 0 0 1 2.995 2.824l.005 .176a3 3 0 0 1 3 3a6 6 0 0 1 -5.775 5.996l-.225 .004h-4l.15 .005a2 2 0 0 1 1.844 1.838l.006 .157v4a2 2 0 0 1 -1.85 1.995l-.15 .005h-2a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-4a2 2 0 0 1 1.85 -1.995l.15 -.005v-1a1 1 0 0 1 .883 -.993l.117 -.007h5a4 4 0 0 0 4 -4a1 1 0 0 0 -.883 -.993l-.117 -.007l-.005 .176a3 3 0 0 1 -2.819 2.819l-.176 .005h-10a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h10z" /></svg>',
-        options: [
-            {
-                id: 'reset colors',
-                type: 'button',
-                onChange: () => {
-                    const root = document.documentElement;
-
-                    const properties = [
-                        '--c-accent',
-                        '--c-accent-variant',
-                        '--c-accent-variant2',
-                        '--c-s',
-                        '--c-s-variant',
-                        '--c-s-variant2',
-                        '--c-t',
-                        '--c-t-variant',
-                        '--c-t-variant2',
-                        '--c-t-variant3',
-                        '--c-t-variant4'
-                    ];
-
-                    properties.forEach(prop => {
-                        root.style.removeProperty(prop);
-                    });
-
-                    settings.value[0].options[1].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim());
-                    settings.value[0].options[2].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim());
-                    settings.value[0].options[3].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim());
-                    settings.value[0].options[4].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim());
-                    settings.value[0].options[5].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim());
-                    settings.value[0].options[6].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim());
-                    settings.value[0].options[7].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim());
-                    settings.value[0].options[8].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim());
-                    settings.value[0].options[9].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim());
-                    settings.value[0].options[10].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim());
-                    settings.value[0].options[11].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()); 
-                    
-                    activeSetting.value = settings.value.filter((s)=>s.id == activeSetting.value?.id)[0];
-                },
-            },
-            {
-                id: 'main color 1',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-accent', color);
-                },
-            },
-            {
-                id: 'main color 2',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-accent-variant', color);
-                },
-            },
-            {
-                id: 'main color 3',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-accent-variant2', color);
-                },
-            },
-            {
-                id: 'secondary color 1',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-s', color);
-                },
-            },
-            {
-                id: 'secondary color 2',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-s-variant', color);
-                },
-            },
-            {
-                id: 'secondary color 3',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-s-variant2', color);
-                },
-            },
-            {
-                id: 'tertiary color 1',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-t', color);
-                },
-            },
-            {
-                id: 'tertiary color 2',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-t-variant', color);
-                },
-            },
-            {
-                id: 'tertiary color 3',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-t-variant2', color);
-                },
-            },
-            {
-                id: 'tertiary color 4',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-t-variant3', color);
-                },
-            },
-            {
-                id: 'tertiary color 5',
-                type: 'color_picker',
-                value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()),
-                onChange: (value: any) => {
-                    const color = `#${value}`;
-                    const root = document.documentElement;
-                    root.style.setProperty('--c-t-variant4', color);
-                },
-            }
-        ]
-    },
-    {
-        id: 'Credits',
-        icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>',
-        options: [
-            {
-                id: 'Credits',
-                type: 'text',
-                value: `By kiocode`
-            }
-        ]
-    }
-]);
-
-
-let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
 
 const send = window.electron.ipcRenderer.send;
 
@@ -283,11 +115,221 @@ const enableListener = (cheatId: string, component: IMenuCheatItemComponent) => 
     document.addEventListener('keydown', listener);
 };
 
-send('getCheats');
-window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory[]) => {
-    categories.value = data;
+send('getCheatsAndOffsets');
+window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
+    offsetsList = offsets;
+    categories.value = cheats;
     activeCategory.value = categories.value[0];
+
+    let offsetsOptions = offsetsList.map(o=>{
+        return {
+            ids: o.ids,
+            title: o.title,
+            type: 'text', 
+            value: o.value
+        };  
+    });
+
+    offsetsOptions.push({
+        id: 'reset',
+        type: 'button', 
+        onChange: () => {
+            offsetsOptions.forEach(o => {
+                // if(o.ids) {
+                //     send('updateOffset', { ids: o.ids, value: o.value });
+                // }
+            });
+        }
+    });
+
+    offsetsOptions.push({
+        id: 'save',
+        type: 'button', 
+        onChange: () => {
+            offsetsOptions.forEach(o => {
+                if(o.ids) {
+                    send('updateOffset', { ids: o.ids, value: o.value });
+                }
+            });
+        }
+    });
+        
+    settings.value = [
+        {
+            id: 'Appearance',
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-paint"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 2a3 3 0 0 1 2.995 2.824l.005 .176a3 3 0 0 1 3 3a6 6 0 0 1 -5.775 5.996l-.225 .004h-4l.15 .005a2 2 0 0 1 1.844 1.838l.006 .157v4a2 2 0 0 1 -1.85 1.995l-.15 .005h-2a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-4a2 2 0 0 1 1.85 -1.995l.15 -.005v-1a1 1 0 0 1 .883 -.993l.117 -.007h5a4 4 0 0 0 4 -4a1 1 0 0 0 -.883 -.993l-.117 -.007l-.005 .176a3 3 0 0 1 -2.819 2.819l-.176 .005h-10a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-2a3 3 0 0 1 2.824 -2.995l.176 -.005h10z" /></svg>',
+            options: [
+                {
+                    id: 'reset colors',
+                    type: 'button',
+                    onChange: () => {
+                        const root = document.documentElement;
+
+                        const properties = [
+                            '--c-accent',
+                            '--c-accent-variant',
+                            '--c-accent-variant2',
+                            '--c-s',
+                            '--c-s-variant',
+                            '--c-s-variant2',
+                            '--c-t',
+                            '--c-t-variant',
+                            '--c-t-variant2',
+                            '--c-t-variant3',
+                            '--c-t-variant4'
+                        ];
+
+                        properties.forEach(prop => {
+                            root.style.removeProperty(prop);
+                        });
+
+                        settings.value[0].options[1].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim());
+                        settings.value[0].options[2].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim());
+                        settings.value[0].options[3].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim());
+                        settings.value[0].options[4].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim());
+                        settings.value[0].options[5].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim());
+                        settings.value[0].options[6].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim());
+                        settings.value[0].options[7].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim());
+                        settings.value[0].options[8].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim());
+                        settings.value[0].options[9].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim());
+                        settings.value[0].options[10].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim());
+                        settings.value[0].options[11].value = rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()); 
+                        
+                        activeSetting.value = settings.value.filter((s)=>s.id == activeSetting.value?.id)[0];
+                    },
+                },
+                {
+                    id: 'main color 1',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-accent', color);
+                    },
+                },
+                {
+                    id: 'main color 2',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-accent-variant', color);
+                    },
+                },
+                {
+                    id: 'main color 3',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-accent-variant2').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-accent-variant2', color);
+                    },
+                },
+                {
+                    id: 'secondary color 1',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-s', color);
+                    },
+                },
+                {
+                    id: 'secondary color 2',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-s-variant', color);
+                    },
+                },
+                {
+                    id: 'secondary color 3',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-s-variant2').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-s-variant2', color);
+                    },
+                },
+                {
+                    id: 'tertiary color 1',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-t', color);
+                    },
+                },
+                {
+                    id: 'tertiary color 2',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-t-variant', color);
+                    },
+                },
+                {
+                    id: 'tertiary color 3',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant2').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-t-variant2', color);
+                    },
+                },
+                {
+                    id: 'tertiary color 4',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant3').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-t-variant3', color);
+                    },
+                },
+                {
+                    id: 'tertiary color 5',
+                    type: 'color_picker',
+                    value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t-variant4').trim()),
+                    onChange: (value: any) => {
+                        const color = `#${value}`;
+                        const root = document.documentElement;
+                        root.style.setProperty('--c-t-variant4', color);
+                    },
+                }
+            ]
+        },
+        {
+            id: 'Offsets',
+            icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-binary-tree-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" /><path d="M7 14a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" /><path d="M21 14a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" /><path d="M14 18a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" /><path d="M12 8v8" /><path d="M6.316 12.496l4.368 -4.992" /><path d="M17.684 12.496l-4.366 -4.99" /></svg>',
+            options: offsetsOptions
+        },
+        {
+            id: 'Credits',
+            icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>',
+            options: [
+                {
+                    id: 'Credits',
+                    type: 'description',
+                    value: `By kiocode`
+                }
+            ]
+        }
+    ];
+
     activeSetting.value = settings.value[0];
+
 });
 </script>
 
@@ -444,8 +486,12 @@ window.electron.ipcRenderer.on('getCheatsResponse', (_, data: IMenuCheatCategory
                             <ColorPicker v-model="option.value" v-on:change="option.onChange(option.value)" format="hex" />
                         </div>
                     </div>
-                    <div class="text-component" v-if="option.type == 'text'">
+                    <div class="description-component" v-if="option.type == 'description'">
                         {{ option.value }}
+                    </div>
+                    <div class="text-component" v-if="option.type == 'text'">
+                        <span>{{ option.title }}</span>
+                        <InputText type="text" v-model="option.value" />
                     </div>
                 </div>
             </div>

@@ -224,8 +224,96 @@ export function ipcListeners(window: BrowserWindow | null) {
         Variables.getInstance()[cheatId][componentId].hotkeys = JSON.parse(newValue);
     });
 
-    ipcMain.on('getCheats', (event) => {
-        event.reply('getCheatsResponse', cheats);
+    ipcMain.on('getCheatsAndOffsets', (event) => {
+        const offsets = [
+            {
+                ids: ['staticServerAddr'],
+                title: 'Static Server Address',
+                value: '0x' + Offsets.getInstance().staticServerAddr.toString(16)
+            },
+            {
+                ids: ['staticClientAddr'],
+                title: 'Static Client Address',
+                value: '0x' + Offsets.getInstance().staticClientAddr.toString(16)
+            },
+            {
+                ids: ['staticClientAddr', 'client', 'aimX'],
+                title: 'Client Aim X Axis',
+                value: '0x' + Offsets.getInstance().client.aimX.toString(16)
+            },
+            {
+                ids: ['staticClientAddr', 'client', 'aimY'],
+                title: 'Client Aim Y Axis',
+                value: '0x' + Offsets.getInstance().client.aimY.toString(16)
+            },
+            {
+                ids: ['staticClientAddr', 'client', 'lWalk'],
+                title: 'Client Left Walk',
+                value: '0x' + Offsets.getInstance().client.lWalk.toString(16)
+            },
+            {
+                ids: ['staticClientAddr', 'client', 'rWalk'],
+                title: 'Client Right Walk',
+                value: '0x' + Offsets.getInstance().client.rWalk.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'localPlayerId'],
+                title: 'Server Local Player ID',
+                value: '0x' + Offsets.getInstance().server.localPlayerId.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'onlinePlayers'],
+                title: 'Server Online Players',
+                value: '0x' + Offsets.getInstance().server.onlinePlayers.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'gametick'],
+                title: 'Server Player Game Tick',
+                value: '0x' + Offsets.getInstance().server.gametick.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'playerX'],
+                title: 'Server Player X Axis',
+                value: '0x' + Offsets.getInstance().server.playerX.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'playerY'],
+                title: 'Server Player Y Axis',
+                value: '0x' + Offsets.getInstance().server.playerY.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'velX'],
+                title: 'Server Player Velocity X Axis',
+                value: '0x' + Offsets.getInstance().server.velX.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'velY'],
+                title: 'Server Player Velocity Y Axis',
+                value: '0x' + Offsets.getInstance().server.velY.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'aimAngle'],
+                title: 'Server Player Aim Angle',
+                value: '0x' + Offsets.getInstance().server.aimAngle.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'frozenTime'],
+                title: 'Server Player Frozen Time',
+                value: '0x' + Offsets.getInstance().server.frozenTime.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'frozen'],
+                title: 'Server Player Frozen State',
+                value: '0x' + Offsets.getInstance().server.frozen.toString(16)
+            },
+            {
+                ids: ['staticServerAddr', 'server', 'hookingTime'],
+                title: 'Server Player Hooking Time',
+                value: '0x' + Offsets.getInstance().server.hookingTime.toString(16)
+            }
+        ];
+
+        event.reply('getCheatsAndOffsetsResponse', { cheats, offsets });
     });
 
     ipcMain.on('updateValue', (_, {cheatId, componentId, newValue}) => {
