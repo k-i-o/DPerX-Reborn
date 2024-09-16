@@ -18,17 +18,18 @@
 }
 
 :root {
-    --c-accent: fade(@c-accent, 99%);
-    --c-accent-variant: fade(@c-accent, 90%);
+    --c-accent: @c-accent;
+    --c-accent-variant1: fade(@c-accent, 90%);
     --c-accent-variant2: fade(@c-accent, 70%);
-    --c-s: fade(@c-s, 99%);
-    --c-s-variant: fade(@c-s, 15%);
+    --c-s: @c-s;
+    --c-s-variant1: fade(@c-s, 15%);
     --c-s-variant2: fade(@c-s, 50%);
-    --c-t: fade(@c-t, 99%);
-    --c-t-variant: lighten(@c-t, 6%);
+    --c-t: @c-t,;
+    --c-t-variant1: lighten(@c-t, 6%);
     --c-t-variant2: fade(@c-t, 80%);
     --c-t-variant3: fade(lighten(@c-t, 11%), 90%);
     --c-t-variant4: lighten(@c-t, 5%);
+    --c-t-variant5: darken(@c-t, 5%);
 }
 
 html, body {
@@ -36,7 +37,7 @@ html, body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-color: var(--c-t-variant);
+    background-color: var(--c-t-variant1);
     color: var(--c-s);
     user-select: none;
     padding: 0;
@@ -100,13 +101,13 @@ html, body {
         width: 100vw;
         padding: 25px;
         padding-right: 12px;
-        background-color: var(--c-t-variant);
+        background-color: var(--c-t-variant1);
         border-radius: @r-border;
 
         .horizontal-separator {
             width: 100%;
             min-height: 2px;
-            background-color: var(--c-s-variant);
+            background-color: var(--c-s-variant1);
             border-radius: 2px;
             opacity: .8;
         }
@@ -540,6 +541,7 @@ html, body {
                     .button-component {
                         width: 100%;
                         height: 100%;
+                        background-color: var(--c-t-variant5);
                         transition: background-color .2s 0s ease-in-out;
 
                         &:hover {
