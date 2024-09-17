@@ -145,6 +145,7 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
         };  
     }));
 
+    let rainbowEnabled = false;
     let rainbowSpeed = 100;
     let rainbowInterval: any = null;
 
@@ -195,12 +196,16 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
                     id: 'rainbow effect',
                     type: 'button',
                     onChange: () => {
+                        rainbowEnabled = !rainbowEnabled;
+
                         const root = document.documentElement;
                         let hue = 0;
 
                         if (rainbowInterval) {
                             clearInterval(rainbowInterval);
                         }
+
+                        if(!rainbowEnabled) return;
 
                         rainbowInterval = setInterval(() => {
                             hue = (hue + 1) % 360;
@@ -210,6 +215,7 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
                             root.style.setProperty('--c-accent-variant1', adjustAlpha(color, 0.9));
                             root.style.setProperty('--c-accent-variant2', adjustAlpha(color, 0.7));
                         }, rainbowSpeed);
+                        
                     },
                 },
                 {
@@ -222,6 +228,8 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
                         if (rainbowInterval) {
                             clearInterval(rainbowInterval);
                         }
+
+                        if(!rainbowEnabled) return;
 
                         let hue = 0;
                         rainbowInterval = setInterval(() => {
