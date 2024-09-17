@@ -30,6 +30,11 @@ const getCategories = (): IMenuCheatCategory[] => [
                         type: 'toggle',
                         value: Variables.getInstance().aimbot.holdHotkeys
                     },
+                    {
+                        id: 'maxDistance',
+                        type: 'slider',
+                        value: Variables.getInstance().aimbot.maxDistance
+                    }
                 ]
             }
         ]
@@ -83,6 +88,11 @@ const getCategories = (): IMenuCheatCategory[] => [
                         type: 'toggle',
                         value: Variables.getInstance().balancer.holdHotkeys
                     },
+                    {
+                        id: 'maxDistance',
+                        type: 'slider',
+                        value: Variables.getInstance().balancer.maxDistance
+                    }
                 ]
             }
         ]
@@ -278,7 +288,6 @@ export function ipcListeners(window: BrowserWindow | null) {
 
     ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
         Variables.getInstance()[cheatId][componentId] = JSON.parse(newValue);
-
     });
 
     ipcMain.on('getCheatsAndOffsets', (event) => {

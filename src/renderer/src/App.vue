@@ -370,8 +370,8 @@ on('cheatsUpdated', (_, cheats) => {
                 </div>
     
                 <div class="option" v-for="item in activeCategory.items">
-                    <div class="toggle" v-if="item.type == 'toggle' && item.enabled != undefined">
-                        <Checkbox v-model="item.enabled" :disabled="gameAttached" v-on:change="toggleCheat(item.id, item.enabled, item.needGame)" :binary="true" />
+                    <div class="toggle" v-if="item.type == 'toggle' && item.enabled != undefined" :title="!gameAttached ? 'Disabled because the game isn\'t attached' : 'Enable the cheat'">
+                        <Checkbox v-model="item.enabled" :disabled="!gameAttached" v-on:change="toggleCheat(item.id, item.enabled, item.needGame)" :binary="true" />
                         <span>{{item.title}}</span>
                     </div>
 
@@ -409,7 +409,7 @@ on('cheatsUpdated', (_, cheats) => {
                                     {{ formatName(component.id) }} (Enter to confirm)
                                 </span>
                                 <div class="input listener">
-                                    <button v-on:click="enableListener(item.id, component)" @contextmenu.prevent="resetListener(item.id, component)" @keydown.enter.prevent title="Left-Click to start listener and Right-Click to reset keys">{{ component.value.display || "Hotkeys" }}</button>
+                                    <button v-on:click="enableListener(item.id, component)" @contextmenu.prevent="resetListener(item.id, component)" @keydown.enter.prevent title="Left-Click to start listener and Right-Click to reset keys">{{ component.value.display || "Left-Click to start" }}</button>
                                 </div>
                             </div>
                         </div>

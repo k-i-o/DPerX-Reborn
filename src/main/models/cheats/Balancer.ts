@@ -9,7 +9,7 @@ export class Balancer implements IBase {
     
     enabled: boolean = false;
     needReset: boolean = false;
-    distance: number = 999;
+    maxDistance: number = 999;
     
     hotkeys: number[] = [];
     holdHotkeys: boolean = false;
@@ -19,7 +19,7 @@ export class Balancer implements IBase {
         const localPlayer = Server.getInstance().localPlayer;
         if (!systemVar.baseClientAddr || !localPlayer) return;
 
-        const nearest = getNearestToPlayer(this.distance);
+        const nearest = getNearestToPlayer(this.maxDistance);
         if(!nearest) return;
       
         if(localPlayer.position.x > nearest.position.x){
