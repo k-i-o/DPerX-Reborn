@@ -12,6 +12,7 @@ import { ISetting } from '../../interfaces/ISetting';
 import { IMenuCheatItemComponent } from 'src/interfaces/IMenuCheatItemComponent';
 import { adjustAlpha, darken, lighten, rgbToHex } from './utils';
 
+let gameAttached: Ref<boolean> = ref(false);
 let offsetsList: any;
 let categories: Ref<IMenuCheatCategory[]> = ref([]);
 let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
@@ -20,6 +21,7 @@ let settings: Ref<ISetting[]> = ref([]);
 let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
 
 const send = window.electron.ipcRenderer.send;
+const on = window.electron.ipcRenderer.on;
 
 const minimize = () => {
     window.electron.ipcRenderer.send('minimize');
@@ -27,6 +29,12 @@ const minimize = () => {
 
 const close = () => {
     window.electron.ipcRenderer.send('close');
+}
+
+const formatName = (str: string) => {
+    let formatted = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+    
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
 const toggleCheat = (type: string, status: boolean, needGame: boolean) => {
@@ -38,6 +46,10 @@ const runCheat = (type: string, needGame: boolean) => {
 const attach = () => {
     send('attach');
 };
+on('gameAttached', (_, attached: boolean) => {
+    gameAttached.value = attached;
+});
+
 const updateValue = (cheatId: string, componentId: string, newValue: any) => {
     send('updateValue', { cheatId, componentId, newValue });
 };
@@ -106,7 +118,7 @@ const resetListener = (cheatId: string, component: IMenuCheatItemComponent) => {
 };
 
 send('getCheatsAndOffsets');
-window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
+on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
     offsetsList = offsets;
     categories.value = cheats;
     activeCategory.value = categories.value[0];
@@ -309,7 +321,7 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
 
 });
 
-window.electron.ipcRenderer.on('cheatsUpdated', (_, {cheats}) => {
+on('cheatsUpdated', (_, cheats) => {
     categories.value = cheats;
 });
 </script>
@@ -359,7 +371,7 @@ window.electron.ipcRenderer.on('cheatsUpdated', (_, {cheats}) => {
     
                 <div class="option" v-for="item in activeCategory.items">
                     <div class="toggle" v-if="item.type == 'toggle' && item.enabled != undefined">
-                        <Checkbox v-model="item.enabled" v-on:change="toggleCheat(item.id, item.enabled, item.needGame)" :binary="true" />
+                        <Checkbox v-model="item.enabled" :disabled="gameAttached" v-on:change="toggleCheat(item.id, item.enabled, item.needGame)" :binary="true" />
                         <span>{{item.title}}</span>
                     </div>
 
@@ -381,12 +393,12 @@ window.electron.ipcRenderer.on('cheatsUpdated', (_, {cheats}) => {
                                     <Checkbox v-model="component.value" v-on:change="updateValue(item.id, component.id, component.value)" :binary="true" />
                                 </div>
                                 <span>
-                                    {{ component.id[0].toUpperCase() + component.id.slice(1) }}
+                                    {{ formatName(component.id) }}
                                 </span>
                             </div>
                             <div class="slider-component" v-if="component.type == 'slider'">
                                 <span>
-                                    {{ component.id[0].toUpperCase() + component.id.slice(1) }} - {{ component.value }}
+                                    {{ formatName(component.id) }} - {{ component.value }}
                                 </span>
                                 <div class="input slider">
                                     <Slider v-model="component.value" v-on:change="updateValue(item.id, component.id, component.value)" min=0 max=999 />
@@ -394,7 +406,7 @@ window.electron.ipcRenderer.on('cheatsUpdated', (_, {cheats}) => {
                             </div>
                             <div class="listener-component" v-if="component.type == 'listener'">
                                 <span>
-                                    {{ component.id[0].toUpperCase() + component.id.slice(1) }} (Enter to confirm)
+                                    {{ formatName(component.id) }} (Enter to confirm)
                                 </span>
                                 <div class="input listener">
                                     <button v-on:click="enableListener(item.id, component)" @contextmenu.prevent="resetListener(item.id, component)" @keydown.enter.prevent title="Left-Click to start listener and Right-Click to reset keys">{{ component.value.display || "Hotkeys" }}</button>

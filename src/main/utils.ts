@@ -1,6 +1,8 @@
+import { BrowserWindow } from "electron";
 import { IPlayer } from "../interfaces/IPlayer";
 import { IVector2 } from "../interfaces/IVector2";
 import { Server } from "./models/singletons/Server";
+import { IMenuCheatCategory } from "../interfaces/IMenuCheatCategory";
 
 export function distance(a: IVector2, b: IVector2) {
     return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
@@ -156,3 +158,32 @@ export function compareArrays(arr1: any[], arr2: any[]) {
 export function convertScanCodeToKeyCode(scanCode: number): number {
     return scanCodeToKeyCodeMap[scanCode] || -1;
 }
+
+export function getHotkeys(cheat: any): number[] {
+    return cheat.hotkeys ? cheat.hotkeys : [];
+}
+
+export function handleCheatToggle(
+    cheat: any, 
+    hotkeys: number[], 
+    pressedKeys: number[], 
+    window: BrowserWindow | null,
+    getCategories: any
+): void {
+    if (!cheat.holdHotkeys && compareArrays(hotkeys, pressedKeys)) {
+        cheat.enabled = !cheat.enabled;
+        pressedKeys = []; 
+        window?.webContents.send("cheatsUpdated", getCategories());
+    } else if (cheat.holdHotkeys && compareArrays(hotkeys, pressedKeys)) {
+        if (!cheat.enabled) {
+            cheat.enabled = true;
+            window?.webContents.send("cheatsUpdated", getCategories());
+        }
+    } else if (cheat.holdHotkeys && !compareArrays(hotkeys, pressedKeys)) {
+        if (cheat.enabled) {
+            cheat.enabled = false;
+            window?.webContents.send("cheatsUpdated", getCategories());
+        }
+    }
+}
+

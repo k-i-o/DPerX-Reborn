@@ -533,9 +533,15 @@ html, body {
                     border-radius: @r-border;
                     -webkit-app-region: no-drag;
                     overflow: hidden;
+                    display: flex;
+                    align-items: center;
 
                     &:has(.button-component) {
                         padding: 0;
+                    }
+
+                    >div {
+                        width: 100%;
                     }
 
                     .button-component {
@@ -559,6 +565,12 @@ html, body {
                         display: flex;
                         flex-direction: column;
                         gap: 5px;
+                    }
+
+                    .slider-component {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
                     }
                 }
             }

@@ -47,12 +47,11 @@ app.whenReady().then(() => {
         optimizer.watchWindowShortcuts(window)
     });
 
-    startGlobalListener();
-
     updater();
     
     createWindow();
-
+    
+    startGlobalListener(mainWindow);
     ipcListeners(mainWindow);  
 
     app.on('activate', function () {
