@@ -2,7 +2,8 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { ipcListeners, updater } from './workers'
+import { ipcListeners, startGlobalListener, updater } from './workers'
+import { Variables } from './models/singletons/Variables'
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -40,11 +41,13 @@ function createWindow(): void {
 
 app.whenReady().then(() => {
     
-    electronApp.setAppUserModelId('it.kiocode.dperx-reborn')
+    electronApp.setAppUserModelId('it.kiocode.dperx-reborn');
 
     app.on('browser-window-created', (_, window) => {
         optimizer.watchWindowShortcuts(window)
-    })
+    });
+
+    startGlobalListener();
 
     updater();
     
@@ -54,7 +57,7 @@ app.whenReady().then(() => {
 
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    })
+    });
     
 })
 

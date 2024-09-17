@@ -7,7 +7,7 @@ export class Spoofer implements IBase {
 
     backup: boolean = true;
 
-    hotkeys: any[] = [];
+    hotkeys: number[] = [];
 
     execute() {
         const desktopPath = this.getDesktopPath();

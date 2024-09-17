@@ -5,13 +5,58 @@ import { Offsets } from './models/singletons/Offsets';
 import { Server } from './models/singletons/Server';
 import { Variables } from './models/singletons/Variables';
 import { IMenuCheatCategory } from '../interfaces/IMenuCheatCategory';
+import { compareArrays, convertScanCodeToKeyCode } from './utils';
 
-function keyPressed(keys): boolean {
-
+function getHotkeys(cheat: any): number[] {
+    return cheat.hotkeys ? cheat.hotkeys : [];
 }
 
-function canBeExecuted(cheat: any): boolean {
-    return (!cheat.hotkeys && cheat.enabled) || (cheat.hotkeys && cheat.enabled && keyPressed(cheat.hotkeys));
+function handleCheatToggle(
+    cheat: any, 
+    hotkeys: number[], 
+    pressedKeys: number[], 
+): void {
+    if (!cheat.holdHotkeys && compareArrays(hotkeys, pressedKeys)) {
+        cheat.enabled = !cheat.enabled;
+        pressedKeys = []; 
+    } else if (cheat.holdHotkeys && compareArrays(hotkeys, pressedKeys)) {
+        if (!cheat.enabled) {
+            cheat.enabled = true;
+        }
+    } else if (cheat.holdHotkeys && !compareArrays(hotkeys, pressedKeys)) {
+        if (cheat.enabled) {
+            cheat.enabled = false;
+        }
+    }
+}
+
+export function startGlobalListener() {
+    let pressedKeys: number[] = [];
+
+    Variables.getInstance().globalListener.addListener(function (e, _) {
+        const keyCode = convertScanCodeToKeyCode(e.scanCode);
+
+        if (e.state === 'UP') {
+            pressedKeys = pressedKeys.filter(key => key !== keyCode);
+        } else if (!pressedKeys.includes(keyCode)) {
+            pressedKeys.push(keyCode);
+        }
+        
+        const cheatsWithEnabled = [
+            Variables.getInstance().spinbot,
+            Variables.getInstance().aimbot,
+            Variables.getInstance().balancer
+        ];
+        cheatsWithEnabled.forEach(c=> {
+            handleCheatToggle(c, getHotkeys(c), pressedKeys);
+        });
+
+        const spoofer = Variables.getInstance().spoofer;
+        if (compareArrays(getHotkeys(spoofer), pressedKeys)) {
+            spoofer.execute();
+            pressedKeys = []; 
+        }
+    });
 }
 
 export function updater() {
@@ -29,7 +74,7 @@ export function updater() {
 
         Server.getInstance().update();
 
-        if(canBeExecuted(Variables.getInstance().spinbot)) {
+        if(Variables.getInstance().spinbot.enabled) {
             Variables.getInstance().spinbot.execute(delta);
         }
 
@@ -59,7 +104,18 @@ export function ipcListeners(window: BrowserWindow | null) {
                     needGame: true,
                     type: 'toggle',
                     enabled: Variables.getInstance().aimbot.enabled,
-                    components: []
+                    components: [
+                        {
+                            id: 'hotkeys',
+                            type: 'listener',
+                            value: Variables.getInstance().aimbot.hotkeys
+                        },                        
+                        {
+                            id: 'holdHotkeys',
+                            type: 'toggle',
+                            value: Variables.getInstance().aimbot.holdHotkeys
+                        },
+                    ]
                 }
             ]
         },
@@ -79,6 +135,10 @@ export function ipcListeners(window: BrowserWindow | null) {
                             id: 'hotkeys',
                             type: 'listener',
                             value: Variables.getInstance().spinbot.hotkeys
+                        },                        {
+                            id: 'holdHotkeys',
+                            type: 'toggle',
+                            value: Variables.getInstance().spinbot.holdHotkeys
                         },
                         {
                             id: 'speed',
@@ -98,7 +158,17 @@ export function ipcListeners(window: BrowserWindow | null) {
                     needGame: true,
                     type: 'toggle',
                     enabled: Variables.getInstance().balancer.enabled,
-                    components: []
+                    components: [
+                        {
+                            id: 'hotkeys',
+                            type: 'listener',
+                            value: Variables.getInstance().balancer.hotkeys
+                        },                        {
+                            id: 'holdHotkeys',
+                            type: 'toggle',
+                            value: Variables.getInstance().balancer.holdHotkeys
+                        },
+                    ]
                 }
             ]
         },
@@ -137,6 +207,11 @@ export function ipcListeners(window: BrowserWindow | null) {
                             type: 'toggle',
                             value: Variables.getInstance().spoofer.backup
                         },
+                        {
+                            id: 'hotkeys',
+                            type: 'listener',
+                            value: Variables.getInstance().spoofer.hotkeys
+                        }
                     ]
                 }
             ]
@@ -196,14 +271,13 @@ export function ipcListeners(window: BrowserWindow | null) {
             Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().staticClientAddr, PTR);
 
             Variables.getInstance().system.gameAttached = true;
-            console.log("Game attached");
 
             new Notification({ title: 'Game attached', body: 'Game attached successfully' }).show();
 
         } catch(e: any) {
             if(e.message == 'unable to find process') {
                 Variables.getInstance().system.gameAttached = false;
-                console.log("Game attaching failed");
+                new Notification({ title: 'Game attaching status', body: 'Game attaching failed' }).show();
             } else {
                 throw e;
             }
@@ -221,7 +295,8 @@ export function ipcListeners(window: BrowserWindow | null) {
     // });
 
     ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
-        Variables.getInstance()[cheatId][componentId].hotkeys = JSON.parse(newValue);
+        Variables.getInstance()[cheatId][componentId] = JSON.parse(newValue);
+
     });
 
     ipcMain.on('getCheatsAndOffsets', (event) => {

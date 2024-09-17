@@ -11,7 +11,8 @@ export class Balancer implements IBase {
     needReset: boolean = false;
     distance: number = 999;
     
-    hotkeys: any[] = [];
+    hotkeys: number[] = [];
+    holdHotkeys: boolean = false;
 
     execute(delta: number): void {
         const systemVar = Variables.getInstance().system;

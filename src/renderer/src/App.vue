@@ -95,6 +95,16 @@ const enableListener = (cheatId: string, component: IMenuCheatItemComponent) => 
     document.addEventListener('keydown', listener);
 };
 
+const resetListener = (cheatId: string, component: IMenuCheatItemComponent) => {
+    component.value = { 
+        keyIds: [], 
+        display: '' 
+    }; 
+
+    send('newHotkeys', {cheatId, componentId: component.id, newValue: JSON.stringify(component.value.keyIds)});
+
+};
+
 send('getCheatsAndOffsets');
 window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
     offsetsList = offsets;
@@ -290,6 +300,10 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
     activeSetting.value = settings.value[0];
 
 });
+
+window.electron.ipcRenderer.on('cheatsUpdated', (_, {cheats}) => {
+    categories.value = cheats;
+});
 </script>
 
 <template>
@@ -375,7 +389,7 @@ window.electron.ipcRenderer.on('getCheatsAndOffsetsResponse', (_, {cheats,offset
                                     {{ component.id[0].toUpperCase() + component.id.slice(1) }} (Enter to confirm)
                                 </span>
                                 <div class="input listener">
-                                    <button v-on:click="enableListener(item.id, component)" @keydown.enter.prevent>{{ component.value.display || "Click to start listener" }}</button>
+                                    <button v-on:click="enableListener(item.id, component)" @contextmenu.prevent="resetListener(item.id, component)" @keydown.enter.prevent title="Left-Click to start listener and Right-Click to reset keys">{{ component.value.display || "Hotkeys" }}</button>
                                 </div>
                             </div>
                         </div>

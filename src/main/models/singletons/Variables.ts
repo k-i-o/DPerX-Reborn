@@ -3,6 +3,7 @@ import { Balancer } from "../cheats/Balancer";
 import { ISystemVariables } from "../../../interfaces/ISystemVariables";
 import { Spinbot } from "../cheats/Spinbot";
 import { Spoofer } from "../cheats/Spoofer";
+import { GlobalKeyboardListener } from "node-global-key-listener";
 
 export class Variables {
 
@@ -11,6 +12,7 @@ export class Variables {
     aimbot: Aimbot = new Aimbot();
     balancer: Balancer = new Balancer();
     spoofer: Spoofer = new Spoofer();
+    globalListener = new GlobalKeyboardListener();
 
     private static instance: Variables;
     private constructor() {}

@@ -1,5 +1,5 @@
 export interface IBase {
     enabled?: boolean;
-    hotkeys: any[];
+    hotkeys: number[];
     execute(delta: number): void;
 }
