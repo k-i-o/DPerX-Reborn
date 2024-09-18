@@ -387,7 +387,6 @@ export function ipcListeners(window: BrowserWindow | null) {
     });
 
     ipcMain.on('updateOffset', (_, {ids, value}) => {
-        console.log(value)
         if(ids.length == 1) {
             Offsets.getInstance()[ids[0]] = BigInt(value);
         } else if (ids.length == 2) {
