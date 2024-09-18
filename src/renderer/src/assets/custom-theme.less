@@ -23,6 +23,10 @@
     outline-color: var(--c-accent) !important;
 }
 
+.p-checkbox-checked .p-checkbox-icon {
+    color: var(--c-t) !important;
+}
+
 /* CUSTOM SLIDER */
 .p-slider-range {
     background-color: var(--c-accent) !important;
@@ -33,7 +37,11 @@
     outline: 0 !important;
 }
 
-/* CUSTOM COLOR PICKER */
+.p-slider:not(.p-disabled) .p-slider-handle:hover::before {
+    color: var(--c-t) !important;
+}
+
+/* CUSTOM COLOR PICKER */ 
 .p-colorpicker-preview:enabled:focus-visible {
     outline: none !important;
     border: 0 !important;

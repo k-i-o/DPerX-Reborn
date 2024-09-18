@@ -398,6 +398,7 @@ html, body {
                             border-radius: @r-border;
                             padding: 9px 15px;
                             border: 2px solid transparent;
+                            color: var(--c-s);
                             transition: border .2s 0s ease-in-out;
 
                             &:hover {
@@ -426,18 +427,20 @@ html, body {
                                 display: flex;
                                 flex-direction: column;
                                 gap: 10px;
+                                color: var(--c-s);
 
                                 button {
                                     background-color: var(--c-t-variant3);
                                     padding: 10px 25px; 
                                     border-radius: @r-border;
+                                    color: var(--c-s);
                                 }
                             }
 
                             .toggle-component {
                                 display: flex;
                                 gap: 10px;
-
+                                color: var(--c-s);
                             }
 
                             .slider-component {
@@ -548,6 +551,7 @@ html, body {
                         width: 100%;
                         height: 100%;
                         background-color: var(--c-t-variant5);
+                        color: var(--c-s);
                         transition: background-color .2s 0s ease-in-out;
 
                         &:hover {
@@ -565,6 +569,10 @@ html, body {
                         display: flex;
                         flex-direction: column;
                         gap: 5px;
+                        
+                        input {
+                            color: var(--c-s);
+                        }
                     }
 
                     .slider-component {
