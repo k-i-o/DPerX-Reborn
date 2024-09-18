@@ -303,77 +303,77 @@ export function ipcListeners(window: BrowserWindow | null) {
                 value: '0x' + Offsets.getInstance().staticClientAddr.toString(16)
             },
             {
-                ids: ['staticClientAddr', 'client', 'aimX'],
+                ids: ['client', 'aimX'],
                 title: 'Client Aim X Axis',
                 value: '0x' + Offsets.getInstance().client.aimX.toString(16)
             },
             {
-                ids: ['staticClientAddr', 'client', 'aimY'],
+                ids: ['client', 'aimY'],
                 title: 'Client Aim Y Axis',
                 value: '0x' + Offsets.getInstance().client.aimY.toString(16)
             },
             {
-                ids: ['staticClientAddr', 'client', 'lWalk'],
+                ids: ['client', 'lWalk'],
                 title: 'Client Left Walk',
                 value: '0x' + Offsets.getInstance().client.lWalk.toString(16)
             },
             {
-                ids: ['staticClientAddr', 'client', 'rWalk'],
+                ids: ['client', 'rWalk'],
                 title: 'Client Right Walk',
                 value: '0x' + Offsets.getInstance().client.rWalk.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'localPlayerId'],
+                ids: ['server', 'localPlayerId'],
                 title: 'Server Local Player ID',
                 value: '0x' + Offsets.getInstance().server.localPlayerId.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'onlinePlayers'],
+                ids: ['server', 'onlinePlayers'],
                 title: 'Server Online Players',
                 value: '0x' + Offsets.getInstance().server.onlinePlayers.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'gametick'],
+                ids: ['server', 'gametick'],
                 title: 'Server Player Game Tick',
                 value: '0x' + Offsets.getInstance().server.gametick.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'playerX'],
+                ids: ['server', 'playerX'],
                 title: 'Server Player X Axis',
                 value: '0x' + Offsets.getInstance().server.playerX.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'playerY'],
+                ids: ['server', 'playerY'],
                 title: 'Server Player Y Axis',
                 value: '0x' + Offsets.getInstance().server.playerY.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'velX'],
+                ids: ['server', 'velX'],
                 title: 'Server Player Velocity X Axis',
                 value: '0x' + Offsets.getInstance().server.velX.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'velY'],
+                ids: ['server', 'velY'],
                 title: 'Server Player Velocity Y Axis',
                 value: '0x' + Offsets.getInstance().server.velY.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'aimAngle'],
+                ids: ['server', 'aimAngle'],
                 title: 'Server Player Aim Angle',
                 value: '0x' + Offsets.getInstance().server.aimAngle.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'frozenTime'],
+                ids: ['server', 'frozenTime'],
                 title: 'Server Player Frozen Time',
                 value: '0x' + Offsets.getInstance().server.frozenTime.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'frozen'],
+                ids: ['server', 'frozen'],
                 title: 'Server Player Frozen State',
                 value: '0x' + Offsets.getInstance().server.frozen.toString(16)
             },
             {
-                ids: ['staticServerAddr', 'server', 'hookingTime'],
+                ids: ['server', 'hookingTime'],
                 title: 'Server Player Hooking Time',
                 value: '0x' + Offsets.getInstance().server.hookingTime.toString(16)
             }
@@ -385,6 +385,18 @@ export function ipcListeners(window: BrowserWindow | null) {
     ipcMain.on('updateValue', (_, {cheatId, componentId, newValue}) => {
         Variables.getInstance()[cheatId][componentId] = newValue;
     });
+
+    ipcMain.on('updateOffset', (_, {ids, value}) => {
+        console.log(value)
+        if(ids.length == 1) {
+            Offsets.getInstance()[ids[0]] = BigInt(value);
+        } else if (ids.length == 2) {
+            Offsets.getInstance()[ids[0]][ids[1]] = BigInt(value);
+        } else if (ids.length == 3) {
+            Offsets.getInstance()[ids[0]][ids[1]][ids[2]] = BigInt(value);
+        }
+    });
+
 
     ipcMain.on('runCheat', async (_, { type, needGame }) => {
 
