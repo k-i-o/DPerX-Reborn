@@ -56,9 +56,9 @@ Using this cheat may violate the terms of service of the DDNet game. Use the sof
 Contributions and improvements are welcome!
 
 1. Fork the repository
-2. Create a branch for your feature: git checkout -b feature/new-feature
-3. Commit your changes: git commit -m 'Add new feature'
-4. Push the branch: git push origin feature/new-feature
+2. Create a branch for your feature: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push the branch: `git push origin feature/new-feature`
 5. Open a pull request
 
 Note: don't install new dependencies if not needed
