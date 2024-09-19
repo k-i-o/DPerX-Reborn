@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { ipcListeners, startGlobalListener, updater } from './workers'
-import { Variables } from './models/singletons/Variables'
+import { Offsets } from './models/singletons/Offsets'
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -46,6 +46,8 @@ app.whenReady().then(() => {
     app.on('browser-window-created', (_, window) => {
         optimizer.watchWindowShortcuts(window)
     });
+
+    Offsets.getInstance().loadDefaultOffsets();
 
     updater();
     

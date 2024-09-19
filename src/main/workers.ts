@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, shell } from 'electron';
 import {  openProcess, PTR, readMemory } from '../../IOMemoryUtility/memoryjs';
 import { Notification } from 'electron/main';
 import { Offsets } from './models/singletons/Offsets';
@@ -162,6 +162,94 @@ const getCategories = (): IMenuCheatCategory[] => [
     }
 ];
 
+const getOffsets = () => [
+    {
+        ids: ['staticServerAddr'],
+        title: 'Static Server Address',
+        value: '0x' + Offsets.getInstance().staticServerAddr.toString(16)
+    },
+    {
+        ids: ['staticClientAddr'],
+        title: 'Static Client Address',
+        value: '0x' + Offsets.getInstance().staticClientAddr.toString(16)
+    },
+    {
+        ids: ['client', 'aimX'],
+        title: 'Client Aim X Axis',
+        value: '0x' + Offsets.getInstance().client.aimX.toString(16)
+    },
+    {
+        ids: ['client', 'aimY'],
+        title: 'Client Aim Y Axis',
+        value: '0x' + Offsets.getInstance().client.aimY.toString(16)
+    },
+    {
+        ids: ['client', 'lWalk'],
+        title: 'Client Left Walk',
+        value: '0x' + Offsets.getInstance().client.lWalk.toString(16)
+    },
+    {
+        ids: ['client', 'rWalk'],
+        title: 'Client Right Walk',
+        value: '0x' + Offsets.getInstance().client.rWalk.toString(16)
+    },
+    {
+        ids: ['server', 'localPlayerId'],
+        title: 'Server Local Player ID',
+        value: '0x' + Offsets.getInstance().server.localPlayerId.toString(16)
+    },
+    {
+        ids: ['server', 'onlinePlayers'],
+        title: 'Server Online Players',
+        value: '0x' + Offsets.getInstance().server.onlinePlayers.toString(16)
+    },
+    {
+        ids: ['server', 'gametick'],
+        title: 'Server Player Game Tick',
+        value: '0x' + Offsets.getInstance().server.gametick.toString(16)
+    },
+    {
+        ids: ['server', 'playerX'],
+        title: 'Server Player X Axis',
+        value: '0x' + Offsets.getInstance().server.playerX.toString(16)
+    },
+    {
+        ids: ['server', 'playerY'],
+        title: 'Server Player Y Axis',
+        value: '0x' + Offsets.getInstance().server.playerY.toString(16)
+    },
+    {
+        ids: ['server', 'velX'],
+        title: 'Server Player Velocity X Axis',
+        value: '0x' + Offsets.getInstance().server.velX.toString(16)
+    },
+    {
+        ids: ['server', 'velY'],
+        title: 'Server Player Velocity Y Axis',
+        value: '0x' + Offsets.getInstance().server.velY.toString(16)
+    },
+    {
+        ids: ['server', 'aimAngle'],
+        title: 'Server Player Aim Angle',
+        value: '0x' + Offsets.getInstance().server.aimAngle.toString(16)
+    },
+    {
+        ids: ['server', 'frozenTime'],
+        title: 'Server Player Frozen Time',
+        value: '0x' + Offsets.getInstance().server.frozenTime.toString(16)
+    },
+    {
+        ids: ['server', 'frozen'],
+        title: 'Server Player Frozen State',
+        value: '0x' + Offsets.getInstance().server.frozen.toString(16)
+    },
+    {
+        ids: ['server', 'hookingTime'],
+        title: 'Server Player Hooking Time',
+        value: '0x' + Offsets.getInstance().server.hookingTime.toString(16)
+    }
+];
+
 export function startGlobalListener(window: BrowserWindow | null) {
     let pressedKeys: number[] = [];
 
@@ -243,6 +331,10 @@ export function ipcListeners(window: BrowserWindow | null) {
         window?.close();
     });
 
+    ipcMain.on('goto', (_, link: string) => {
+        shell.openExternal(link);
+    });
+
     ipcMain.on('attach', (event) => {
 
         if(Variables.getInstance().system.gameAttached) {
@@ -251,7 +343,7 @@ export function ipcListeners(window: BrowserWindow | null) {
             return;
         }
 
-        const DDNetClient = "DDNet.exe"; // "DDPer.exe";
+        const DDNetClient = Offsets.getInstance().exeName;
 
         try {
             const proc = openProcess(DDNetClient);
@@ -286,100 +378,17 @@ export function ipcListeners(window: BrowserWindow | null) {
     //     }
     // });
 
+    ipcMain.on('resetOffsets', (event) => {
+        Offsets.getInstance().loadDefaultOffsets();
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets() });
+    });
+
     ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
         Variables.getInstance()[cheatId][componentId] = JSON.parse(newValue);
     });
 
     ipcMain.on('getCheatsAndOffsets', (event) => {
-        const offsets = [
-            {
-                ids: ['staticServerAddr'],
-                title: 'Static Server Address',
-                value: '0x' + Offsets.getInstance().staticServerAddr.toString(16)
-            },
-            {
-                ids: ['staticClientAddr'],
-                title: 'Static Client Address',
-                value: '0x' + Offsets.getInstance().staticClientAddr.toString(16)
-            },
-            {
-                ids: ['client', 'aimX'],
-                title: 'Client Aim X Axis',
-                value: '0x' + Offsets.getInstance().client.aimX.toString(16)
-            },
-            {
-                ids: ['client', 'aimY'],
-                title: 'Client Aim Y Axis',
-                value: '0x' + Offsets.getInstance().client.aimY.toString(16)
-            },
-            {
-                ids: ['client', 'lWalk'],
-                title: 'Client Left Walk',
-                value: '0x' + Offsets.getInstance().client.lWalk.toString(16)
-            },
-            {
-                ids: ['client', 'rWalk'],
-                title: 'Client Right Walk',
-                value: '0x' + Offsets.getInstance().client.rWalk.toString(16)
-            },
-            {
-                ids: ['server', 'localPlayerId'],
-                title: 'Server Local Player ID',
-                value: '0x' + Offsets.getInstance().server.localPlayerId.toString(16)
-            },
-            {
-                ids: ['server', 'onlinePlayers'],
-                title: 'Server Online Players',
-                value: '0x' + Offsets.getInstance().server.onlinePlayers.toString(16)
-            },
-            {
-                ids: ['server', 'gametick'],
-                title: 'Server Player Game Tick',
-                value: '0x' + Offsets.getInstance().server.gametick.toString(16)
-            },
-            {
-                ids: ['server', 'playerX'],
-                title: 'Server Player X Axis',
-                value: '0x' + Offsets.getInstance().server.playerX.toString(16)
-            },
-            {
-                ids: ['server', 'playerY'],
-                title: 'Server Player Y Axis',
-                value: '0x' + Offsets.getInstance().server.playerY.toString(16)
-            },
-            {
-                ids: ['server', 'velX'],
-                title: 'Server Player Velocity X Axis',
-                value: '0x' + Offsets.getInstance().server.velX.toString(16)
-            },
-            {
-                ids: ['server', 'velY'],
-                title: 'Server Player Velocity Y Axis',
-                value: '0x' + Offsets.getInstance().server.velY.toString(16)
-            },
-            {
-                ids: ['server', 'aimAngle'],
-                title: 'Server Player Aim Angle',
-                value: '0x' + Offsets.getInstance().server.aimAngle.toString(16)
-            },
-            {
-                ids: ['server', 'frozenTime'],
-                title: 'Server Player Frozen Time',
-                value: '0x' + Offsets.getInstance().server.frozenTime.toString(16)
-            },
-            {
-                ids: ['server', 'frozen'],
-                title: 'Server Player Frozen State',
-                value: '0x' + Offsets.getInstance().server.frozen.toString(16)
-            },
-            {
-                ids: ['server', 'hookingTime'],
-                title: 'Server Player Hooking Time',
-                value: '0x' + Offsets.getInstance().server.hookingTime.toString(16)
-            }
-        ];
-
-        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets });
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets() });
     });
 
     ipcMain.on('updateValue', (_, {cheatId, componentId, newValue}) => {

@@ -12,12 +12,17 @@ import { ISetting } from '../../interfaces/ISetting';
 import { IMenuCheatItemComponent } from 'src/interfaces/IMenuCheatItemComponent';
 import { adjustAlpha, darken, lighten, rgbToHex } from './utils';
 
+(window as any).goto = (url: string) => {
+    send('goto', url);
+}
+
 let gameAttached: Ref<boolean> = ref(false);
 let offsetsList: any;
 let categories: Ref<IMenuCheatCategory[]> = ref([]);
-let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
 let settingsVisible: Ref<boolean> = ref(false);
 let settings: Ref<ISetting[]> = ref([]);
+
+let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
 let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
 
 const send = window.electron.ipcRenderer.send;
@@ -121,6 +126,7 @@ send('getCheatsAndOffsets');
 on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
     offsetsList = offsets;
     categories.value = cheats;
+
     activeCategory.value = categories.value[0];
 
     let offsetsOptions: any[] = [
@@ -128,11 +134,7 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
             id: 'reset all',
             type: 'button', 
             onChange: () => {
-                offsetsOptions.forEach(o => {
-                    // if(o.ids) {
-                    //     send('updateOffset', { ids: o.ids, value: o.value });
-                    // }
-                });
+                send('resetOffsets');
             }
         },
         {
@@ -312,13 +314,33 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
                     id: 'Credits',
                     type: 'description',
                     value: `By kiocode`
-                }
+                },
+                {
+                    id: 'Credits',
+                    type: 'description-html',
+                    value: `<a href="#" onclick="window.goto('')">Youtube</a>`
+                },
+                {
+                    id: 'Credits',
+                    type: 'description-html',
+                    value: `<a href="#" onclick="window.goto('https://discord.gg/DceN7MuHGu')">Discord</a>`
+                },
+                {
+                    id: 'Credits',
+                    type: 'description-html',
+                    value: `<a href="#" onclick="window.goto('https://www.patreon.com/kiocode')">Patreon</a>`
+                },
+                {
+                    id: 'Credits',
+                    type: 'description-html',
+                    value: `<a href="#" onclick="window.goto('https://github.com/k-i-o')">Github</a>`
+                },
+                
             ]
         }
     ];
 
     activeSetting.value = settings.value[0];
-
 });
 
 on('cheatsUpdated', (_, cheats) => {
@@ -490,6 +512,7 @@ on('cheatsUpdated', (_, cheats) => {
                     <div class="description-component" v-if="option.type == 'description'">
                         {{ option.value }}
                     </div>
+                    <div class="description-component" v-if="option.type == 'description-html'" v-html="option.value"></div>
                     <div class="text-component" v-if="option.type == 'text'">
                         <span>{{ option.title }}</span>
                         <InputText type="text" v-model="option.value" />
