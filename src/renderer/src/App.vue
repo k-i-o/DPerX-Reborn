@@ -434,6 +434,10 @@ on('cheatsUpdated', (_, cheats) => {
                                     <button v-on:click="enableListener(item.id, component)" @contextmenu.prevent="resetListener(item.id, component)" @keydown.enter.prevent title="Left-Click to start listener and Right-Click to reset keys">{{ component.value.display || "Left-Click to start" }}</button>
                                 </div>
                             </div>
+                            <div class="text-component" v-if="component.type == 'text'">
+                                <span>{{ formatName(component.id) }}</span>
+                                <InputText type="text" v-model="component.value" v-on:input="updateValue(item.id, component.id, component.value)" />
+                            </div>
                         </div>
                     </div>
                 </div>

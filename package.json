@@ -28,6 +28,7 @@
     "electron-updater": "^6.1.7",
     "node-global-key-listener": "^0.3.0",
     "primevue": "^4.0.6",
+    "teeworlds": "^2.5.4",
     "tinycolor2": "^1.6.0"
   },
   "devDependencies": {

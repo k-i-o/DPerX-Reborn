@@ -4,15 +4,18 @@ import { ISystemVariables } from "../../../interfaces/ISystemVariables";
 import { Spinbot } from "../cheats/Spinbot";
 import { Spoofer } from "../cheats/Spoofer";
 import { GlobalKeyboardListener } from "node-global-key-listener";
+import { BotManager } from "../cheats/BotManager";
 
 export class Variables {
 
     system: ISystemVariables = { gameAttached: false, handle: undefined, baseClientAddr: undefined, baseServerAddr: undefined };
+    globalListener = new GlobalKeyboardListener();
+
     spinbot: Spinbot = new Spinbot();
     aimbot: Aimbot = new Aimbot();
     balancer: Balancer = new Balancer();
     spoofer: Spoofer = new Spoofer();
-    globalListener = new GlobalKeyboardListener();
+    botManager: BotManager = new BotManager();
 
     private static instance: Variables;
     private constructor() {}

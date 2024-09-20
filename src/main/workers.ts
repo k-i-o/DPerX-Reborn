@@ -147,17 +147,59 @@ const getCategories = (): IMenuCheatCategory[] => [
         description: 'Manipulate bots for attack strategies or custom gameplay experiences.',
         items: [
             // {
-            //     id: 'bot_attack',
+            //     id: 'botAttack',
             //     title: 'Run Bot Attack',
             //     enabled: Variables.getInstance().bot_attack.enabled,
             //     components: []
             // },
-            // {
-            //     id: 'join_bot',
-            //     title: 'Join Custom Bot',
-            //     enabled: Variables.getInstance().join_bot.enabled,
-            //     components: []
-            // }
+            {
+                id: 'botManager',
+                title: 'Join Custom Bot',
+                type: 'run',
+                needGame: false,
+                components: [
+                    {
+                        id: 'ip',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.ip
+                    },
+                    {
+                        id: 'port',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.port
+                    },
+                    {
+                        id: 'name',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.name
+                    },
+                    {
+                        id: 'clan',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.clan
+                    },
+                    {
+                        id: 'skin',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.skin
+                    },
+                    {
+                        id: 'bodyColor',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.bodyColor
+                    },
+                    {
+                        id: 'feetColor',
+                        type: 'text',
+                        value: Variables.getInstance().botManager.feetColor
+                    },
+                    {
+                        id: 'useCustomColors',
+                        type: 'toggle',
+                        value: Variables.getInstance().botManager.useCustomColors
+                    },
+                ]
+            }
         ]
     }
 ];
@@ -414,6 +456,9 @@ export function ipcListeners(window: BrowserWindow | null) {
             switch (type) {
                 case "spoofer":
                     Variables.getInstance().spoofer.execute();
+                    break;
+                case "botManager":
+                    Variables.getInstance().botManager.execute();
                     break;
 
                 default:
