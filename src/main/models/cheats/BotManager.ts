@@ -1,6 +1,6 @@
 import { Client } from "teeworlds";
 import { IBase } from "../../../interfaces/IBase";
-import { Bot } from "./Bot";
+import { hexToTwColor } from "../../utils";
 
 export class BotManager implements IBase {
 
@@ -13,8 +13,8 @@ export class BotManager implements IBase {
     clan: string;
     country: number;
     skin: string;
-    bodyColor: number;
-    feetColor: number;
+    bodyColor: string;
+    feetColor: string;
     useCustomColors: boolean;
     private client;
 
@@ -24,9 +24,9 @@ export class BotManager implements IBase {
         this.name = "Bot";
         this.clan = "Clan"; 
         this.country = 0; 
-        this.skin = "grey_fox"; 
-        this.bodyColor = 133532; 
-        this.feetColor = 133532; 
+        this.skin = "greyfox"; 
+        this.bodyColor = "#ffffff"; 
+        this.feetColor = "#ffffff"; 
         this.useCustomColors = false; 
     }
 
@@ -35,7 +35,7 @@ export class BotManager implements IBase {
         // this.bots.forEach(b=>{
         //     b.join(this.ip, this.port);
         // })
-           
+
         this.client = new Client(this.ip, this.port, this.name, {
             identity: {
                 id: 0,
@@ -44,8 +44,8 @@ export class BotManager implements IBase {
                 country: this.country,
                 skin: this.skin,
                 use_custom_color: this.useCustomColors ? 1 : 0,
-                color_body: this.bodyColor,
-                color_feet: this.feetColor
+                color_body: hexToTwColor(this.bodyColor),
+                color_feet: hexToTwColor(this.feetColor)
             }
         });
 
@@ -60,7 +60,7 @@ export class BotManager implements IBase {
         });
 
         this.client.on("message", message => {
-            console.log(message);
+            // console.log(message);
         });
     }
 }

@@ -5,7 +5,7 @@ import { Offsets } from './models/singletons/Offsets';
 import { Server } from './models/singletons/Server';
 import { Variables } from './models/singletons/Variables';
 import { IMenuCheatCategory } from '../interfaces/IMenuCheatCategory';
-import { compareArrays, convertScanCodeToKeyCode, getHotkeys, handleCheatToggle } from './utils';
+import { compareArrays, convertScanCodeToKeyCode, getHotkeys, handleCheatToggle, rgbToHex } from './utils';
 
 const getCategories = (): IMenuCheatCategory[] => [
     {
@@ -185,13 +185,13 @@ const getCategories = (): IMenuCheatCategory[] => [
                     },
                     {
                         id: 'bodyColor',
-                        type: 'text',
-                        value: Variables.getInstance().botManager.bodyColor
+                        type: 'color_picker',
+                        value: rgbToHex(Variables.getInstance().botManager.bodyColor)
                     },
                     {
                         id: 'feetColor',
-                        type: 'text',
-                        value: Variables.getInstance().botManager.feetColor
+                        type: 'color_picker',
+                        value: rgbToHex(Variables.getInstance().botManager.feetColor)
                     },
                     {
                         id: 'useCustomColors',

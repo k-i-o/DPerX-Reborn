@@ -2,7 +2,6 @@ import { BrowserWindow } from "electron";
 import { IPlayer } from "../interfaces/IPlayer";
 import { IVector2 } from "../interfaces/IVector2";
 import { Server } from "./models/singletons/Server";
-import { IMenuCheatCategory } from "../interfaces/IMenuCheatCategory";
 
 export function distance(a: IVector2, b: IVector2) {
     return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
@@ -187,3 +186,86 @@ export function handleCheatToggle(
     }
 }
 
+export function rgbToHsl(rgb) {
+    const r = rgb[0] / 255;
+    const g = rgb[1] / 255;
+    const b = rgb[2] / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+  
+    let h, s;
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+    return [h, s, l];
+}  
+
+export function hslToTwColor(hsl) {
+    const h = Math.round(hsl[0] * 255);
+    const s = Math.round(hsl[1] * 255);
+    let l;
+    
+    if (hsl[2] === 0 || hsl[2] === 1) {
+        l = Math.round(hsl[2] * 255);
+    } else {
+        l = Math.round(hsl[2] * 255 / 2);
+    }
+  
+    const twColor = (h << 16) + (s << 8) + l;
+    return twColor;
+}
+
+export function hexToTwColor(hex) {
+    hex = hex.replace(/^#/, '');
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    const hsl = rgbToHsl([r, g, b]);
+    const twColor = hslToTwColor(hsl);
+    return twColor;
+}
+
+export function rgbToHex(color: string) {
+    if (color.startsWith('#')) {
+        return color;
+    }
+
+    const rgb = color.match(/\d+/g);
+    if (!rgb) return color;
+
+    const hex = rgb
+        .slice(0, 3)
+        .map((value: string) => {
+            const hexValue = parseInt(value).toString(16);
+            return hexValue.length === 1 ? '0' + hexValue : hexValue;
+        })
+        .join('');
+
+    return `#${hex}`;
+}
+
+export function hexToRgb(hex: string): {r: number, g: number, b: number} {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : {r: 0, g: 0, b: 0};
+}

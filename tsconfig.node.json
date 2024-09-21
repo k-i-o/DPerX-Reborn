@@ -1,6 +1,6 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "IOMemoryUtility/memoryjs.ts", "src/interfaces"],
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "IOMemoryUtility/memoryjs.ts", "src/interfaces", "src/main/utils.ts"],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"]

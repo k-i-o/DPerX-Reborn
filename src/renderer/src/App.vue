@@ -438,6 +438,14 @@ on('cheatsUpdated', (_, cheats) => {
                                 <span>{{ formatName(component.id) }}</span>
                                 <InputText type="text" v-model="component.value" v-on:input="updateValue(item.id, component.id, component.value)" />
                             </div>
+                            <div class="colorpicker-component" v-if="component.type == 'color_picker'">
+                                <div class="input colorpicker">
+                                    <ColorPicker v-model="component.value" v-on:change="updateValue(item.id, component.id, component.value)" format="hex" />
+                                </div>
+                                <span>
+                                    {{ component.id[0].toUpperCase() + component.id.slice(1) }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
