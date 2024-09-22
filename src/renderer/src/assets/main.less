@@ -29,7 +29,8 @@
     --c-t-variant2: fade(@c-t, 80%);
     --c-t-variant3: fade(lighten(@c-t, 11%), 90%);
     --c-t-variant4: lighten(@c-t, 5%);
-    --c-t-variant5: darken(@c-t, 5%);
+    --c-t-variant5: darken(@c-t, 4%);
+    --c-t-variant6: darken(@c-t, 7%);
 }
 
 html, body {
@@ -299,23 +300,37 @@ html, body {
                     gap: 10px;
 
                     .avatar {
-                        margin: 5px;
-                        border-radius: 50%;
-                        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.243);
-                        width: 70px; 
-                        height: 70px;
+                        width: 90px;
+                        height: 90px;
                         overflow: hidden;
                         position: relative;
                         cursor: pointer;
                         -webkit-app-region: no-drag;
+                        padding: 10px;
 
-                        img {
+                        .logo {
+                            position: relative; 
                             width: 100%;
                             height: 100%;
+
+                            .layer1 g {
+                                fill: var(--c-t-variant5) !important;
+                            }
+                            
+                            .layer2 g {
+                                fill: var(--c-accent) !important;
+                            }
+ 
+                            svg {
+                                position: absolute;
+                                width: 100%;
+                                height: 100%;
+                                top: 0;
+                                left: 0;
+                            } 
                         }
 
                         .settings-icon {
-                            border-radius: 50%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -325,8 +340,7 @@ html, body {
                             position: absolute;
                             top: 0;
                             left: 0;
-                            background-color: rgba(0, 0, 0, 0.4);
-                            backdrop-filter: blur(2px);
+                            backdrop-filter: blur(5px);
                             opacity: 0;
                             transition: all .3s 0s ease-in-out;
 
