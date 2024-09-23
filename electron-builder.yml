@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: dperx-reborn
+appId: it.kiocode.dperxreborn
+productName: DPerX - Reborn
 directories:
   buildResources: build
 files:
@@ -12,7 +12,8 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: dperx-reborn
+  executableName: DPerX-Reborn
+  icon: resources/icon.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

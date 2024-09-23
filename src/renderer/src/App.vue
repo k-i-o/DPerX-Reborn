@@ -284,7 +284,7 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
                     },
                 },
                 {
-                    id: 'thirdary color',
+                    id: 'tertiary color',
                     type: 'color_picker',
                     value: rgbToHex(getComputedStyle(document.documentElement).getPropertyValue('--c-t').trim()),
                     onChange: (value: any) => {

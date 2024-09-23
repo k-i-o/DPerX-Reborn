@@ -16,7 +16,8 @@ function createWindow(): void {
         maximizable: false,
         autoHideMenuBar: true,
         frame: false,
-        ...(process.platform === 'linux' ? { icon } : {}),
+        // ...(process.platform === 'linux' ? { icon } : {}),
+        icon,
         webPreferences: {
             preload: join(__dirname, '../preload/index.js'),
             sandbox: false
@@ -41,7 +42,7 @@ function createWindow(): void {
 
 app.whenReady().then(() => {
     
-    electronApp.setAppUserModelId('it.kiocode.dperx-reborn');
+    electronApp.setAppUserModelId('it.kiocode.dperxreborn');
 
     app.on('browser-window-created', (_, window) => {
         optimizer.watchWindowShortcuts(window)
