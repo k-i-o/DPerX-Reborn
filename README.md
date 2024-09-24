@@ -1,5 +1,7 @@
 # Dperx - Reborn
 
+NOTE: any data in settings or home isn't persistent at the moment
+
 **Dperx - Reborn** is a modified cheat tool for the game *DDNet*. This project provides various features to enhance the gameplay experience by manipulating the game client.
 
 ## Main Features
