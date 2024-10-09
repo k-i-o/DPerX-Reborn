@@ -76,3 +76,39 @@
     outline: 0 !important;
     background-color: var(--c-t-variant4) !important;
 }
+
+/* CUSTOM SELECT */
+.p-select {
+    border: 0 !important;
+    outline: 0 !important;
+    background-color: var(--c-t-variant4) !important;
+}
+
+.p-select-overlay {
+    background: var(--c-t-variant5) !important;
+    border: 0 !important;
+    outline: 0 !important;
+    color: var(--c-s) !important;
+}
+
+.p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
+    background: transparent !important;
+    color: var(--c-s) !important;
+    // background: var(--c-t-variant3) !important;
+}
+
+.p-select-option.p-select-option-selected.p-focus {
+    color: var(--c-s) !important;
+    background: var(--c-t-variant3) !important;
+}
+
+.p-select-option.p-select-option-selected {
+    color: var(--c-s) !important;
+    background: var(--c-t-variant3) !important;
+    // background: transparent !important;
+}
+
+.p-select-option {
+    outline: 0;
+    z-index: 99;
+}

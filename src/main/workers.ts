@@ -204,91 +204,96 @@ const getCategories = (): IMenuCheatCategory[] => [
     }
 ];
 
-const getOffsets = () => [
+const getOffsets = (programName: string) => [
+    {
+        ids: ['exeName'],
+        title: 'Program name',
+        value: Offsets.getInstance().profiles[programName].exeName
+    },
     {
         ids: ['staticServerAddr'],
         title: 'Static Server Address',
-        value: '0x' + Offsets.getInstance().staticServerAddr.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].staticServerAddr.toString(16)
     },
     {
         ids: ['staticClientAddr'],
         title: 'Static Client Address',
-        value: '0x' + Offsets.getInstance().staticClientAddr.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].staticClientAddr.toString(16)
     },
     {
         ids: ['client', 'aimX'],
         title: 'Client Aim X Axis',
-        value: '0x' + Offsets.getInstance().client.aimX.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].client.aimX.toString(16)
     },
     {
         ids: ['client', 'aimY'],
         title: 'Client Aim Y Axis',
-        value: '0x' + Offsets.getInstance().client.aimY.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].client.aimY.toString(16)
     },
     {
         ids: ['client', 'lWalk'],
         title: 'Client Left Walk',
-        value: '0x' + Offsets.getInstance().client.lWalk.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].client.lWalk.toString(16)
     },
     {
         ids: ['client', 'rWalk'],
         title: 'Client Right Walk',
-        value: '0x' + Offsets.getInstance().client.rWalk.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].client.rWalk.toString(16)
     },
     {
         ids: ['server', 'localPlayerId'],
         title: 'Server Local Player ID',
-        value: '0x' + Offsets.getInstance().server.localPlayerId.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.localPlayerId.toString(16)
     },
     {
         ids: ['server', 'onlinePlayers'],
         title: 'Server Online Players',
-        value: '0x' + Offsets.getInstance().server.onlinePlayers.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.onlinePlayers.toString(16)
     },
     {
         ids: ['server', 'gametick'],
         title: 'Server Player Game Tick',
-        value: '0x' + Offsets.getInstance().server.gametick.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.gametick.toString(16)
     },
     {
         ids: ['server', 'playerX'],
         title: 'Server Player X Axis',
-        value: '0x' + Offsets.getInstance().server.playerX.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.playerX.toString(16)
     },
     {
         ids: ['server', 'playerY'],
         title: 'Server Player Y Axis',
-        value: '0x' + Offsets.getInstance().server.playerY.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.playerY.toString(16)
     },
     {
         ids: ['server', 'velX'],
         title: 'Server Player Velocity X Axis',
-        value: '0x' + Offsets.getInstance().server.velX.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.velX.toString(16)
     },
     {
         ids: ['server', 'velY'],
         title: 'Server Player Velocity Y Axis',
-        value: '0x' + Offsets.getInstance().server.velY.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.velY.toString(16)
     },
     {
         ids: ['server', 'aimAngle'],
         title: 'Server Player Aim Angle',
-        value: '0x' + Offsets.getInstance().server.aimAngle.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.aimAngle.toString(16)
     },
     {
         ids: ['server', 'frozenTime'],
         title: 'Server Player Frozen Time',
-        value: '0x' + Offsets.getInstance().server.frozenTime.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.frozenTime.toString(16)
     },
     {
         ids: ['server', 'frozen'],
         title: 'Server Player Frozen State',
-        value: '0x' + Offsets.getInstance().server.frozen.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.frozen.toString(16)
     },
     {
         ids: ['server', 'hookingTime'],
         title: 'Server Player Hooking Time',
-        value: '0x' + Offsets.getInstance().server.hookingTime.toString(16)
+        value: '0x' + Offsets.getInstance().profiles[programName].server.hookingTime.toString(16)
     }
 ];
 
@@ -355,6 +360,12 @@ export function updater() {
     });
 }
 
+function getProfiles() {
+    return Object.keys(Offsets.getInstance().profiles).map(s=> {return {profileName:s}});
+}
+
+let lastProfileSelected = "DDNet";
+
 export function ipcListeners(window: BrowserWindow | null) {
 
     const proceed = (needGame: boolean): boolean => {
@@ -385,15 +396,15 @@ export function ipcListeners(window: BrowserWindow | null) {
             return;
         }
 
-        const DDNetClient = Offsets.getInstance().exeName;
+        const DDNetClient = Offsets.getInstance().profiles["DDNet"].exeName;
 
         try {
             const proc = openProcess(DDNetClient);
             Variables.getInstance().system.handle = proc.handle;
             const base = BigInt(proc.modBaseAddr);
 
-            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().staticServerAddr, PTR);
-            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().staticClientAddr, PTR);
+            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles["DDNet"].staticServerAddr, PTR);
+            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles["DDNet"].staticClientAddr, PTR);
 
             Variables.getInstance().system.gameAttached = true;
 
@@ -422,7 +433,7 @@ export function ipcListeners(window: BrowserWindow | null) {
 
     ipcMain.on('resetOffsets', (event) => {
         Offsets.getInstance().loadDefaultOffsets();
-        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets() });
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets(lastProfileSelected), profiles: getProfiles() });
     });
 
     ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
@@ -430,7 +441,12 @@ export function ipcListeners(window: BrowserWindow | null) {
     });
 
     ipcMain.on('getCheatsAndOffsets', (event) => {
-        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets() });
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets(lastProfileSelected), profiles: getProfiles() });
+    });
+
+    ipcMain.on('setNewProfile', (event, profile) => {
+        lastProfileSelected = profile;
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets(lastProfileSelected), profiles: getProfiles(), currentProfile:lastProfileSelected });
     });
 
     ipcMain.on('updateValue', (_, {cheatId, componentId, newValue}) => {

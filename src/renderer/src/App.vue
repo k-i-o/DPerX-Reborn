@@ -4,6 +4,7 @@ import Slider from 'primevue/slider';
 import Checkbox from 'primevue/checkbox';
 import ColorPicker from 'primevue/colorpicker';
 import InputText from 'primevue/inputtext';
+import Select from 'primevue/select';
 
 // GENERAL IMPORTS
 import { Ref, ref } from 'vue';
@@ -123,7 +124,7 @@ const resetListener = (cheatId: string, component: IMenuCheatItemComponent) => {
 };
 
 send('getCheatsAndOffsets');
-on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
+on('getCheatsAndOffsetsResponse', (_, {cheats,offsets,profiles,currentProfile}) => {
     offsetsList = offsets;
     categories.value = cheats;
 
@@ -146,6 +147,15 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets}) => {
                         send('updateOffset', { ids: o.ids, value: o.value });
                     }
                 });
+            }
+        },
+        {
+            id: 'profiles',
+            type: 'select', 
+            value: {profileName:currentProfile??'DDNet'},
+            list: profiles,
+            onChange: ({profileName}) => {
+                send('setNewProfile', profileName);
             }
         }
     ];
@@ -658,6 +668,10 @@ on('cheatsUpdated', (_, cheats) => {
                         <div class="input slider">
                             <Slider v-model="option.value" v-on:change="option.onChange(option.value)" min=0 max=200 />
                         </div>
+                    </div>
+                    <div class="select-component" v-if="option.type == 'select'">
+                        <span>{{ option.id[0].toUpperCase() + option.id.slice(1) }}</span>
+                        <Select v-model="option.value" :options="option.list" v-on:change="option.onChange(option.value)" optionLabel="profileName" placeholder="Select a profile" class="w-full md:w-56" />
                     </div>
                     <div class="colorpicker-component" v-if="option.type == 'color_picker'">
                         <span>

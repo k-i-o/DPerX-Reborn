@@ -29,7 +29,7 @@
     --c-t-variant2: fade(@c-t, 80%);
     --c-t-variant3: fade(lighten(@c-t, 11%), 90%);
     --c-t-variant4: lighten(@c-t, 5%);
-    --c-t-variant5: darken(@c-t, 4%);
+    --c-t-variant5: darken(@c-t, 3%);
     --c-t-variant6: darken(@c-t, 7%);
 }
 
@@ -80,7 +80,7 @@ html, body {
         padding: 0;
     }
 
-    a, input, .input, button, .p-colorpicker-panel {
+    a, input, .input, button, .p-colorpicker-panel, .p-select-option {
         -webkit-app-region: no-drag;
     }
 
@@ -588,6 +588,12 @@ html, body {
                         &:hover {
                             background-color: var(--c-t-variant3);
                         }
+                    }
+
+                    .select-component {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
                     }
 
                     .colorpicker-component {
