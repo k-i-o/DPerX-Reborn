@@ -14,7 +14,7 @@ export class Aimbot implements IBase {
     hotkeys: number[] = [];
     holdHotkeys: boolean = false;
 
-    execute(delta: number): void {
+    execute(profile: string, delta: number): void {
         const systemVar = Variables.getInstance().system;
         const localplayer = Server.getInstance().localPlayer;
         if (!systemVar.baseClientAddr || !localplayer) return;
@@ -24,8 +24,8 @@ export class Aimbot implements IBase {
 
         const target = { x: nearest.position.x - localplayer.position.x, y: nearest.position.y - localplayer.position.y };
     
-        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.aimX, target.x, FLOAT);
-        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.aimY, target.y, FLOAT);
+        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.aimX, target.x, FLOAT);
+        writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.aimY, target.y, FLOAT);
     
     }
 

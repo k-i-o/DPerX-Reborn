@@ -48,7 +48,7 @@ app.whenReady().then(() => {
         optimizer.watchWindowShortcuts(window)
     });
 
-    Offsets.getInstance().loadDefaultOffsets();
+    Offsets.getInstance().loadAllDefaultOffsets();
 
     updater();
     

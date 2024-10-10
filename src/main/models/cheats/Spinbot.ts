@@ -15,7 +15,7 @@ export class Spinbot implements IBase {
     hotkeys: number[] = [];
     holdHotkeys: boolean = false;
 
-    execute(delta: number) {
+    execute(profile: string, delta: number) {
         const systemVar = Variables.getInstance().system;
         if (!systemVar.baseClientAddr) return;
 
@@ -26,7 +26,7 @@ export class Spinbot implements IBase {
         const x = Math.sin(radians) * this.distance; 
         const y = Math.cos(radians) * this.distance; 
 
-        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().client.aimX, x, FLOAT);
-        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().client.aimY, y, FLOAT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().profiles[profile].client.aimX, x, FLOAT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr + Offsets.getInstance().profiles[profile].client.aimY, y, FLOAT);
     }
 }

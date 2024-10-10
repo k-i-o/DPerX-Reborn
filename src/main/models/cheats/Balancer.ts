@@ -14,7 +14,7 @@ export class Balancer implements IBase {
     hotkeys: number[] = [];
     holdHotkeys: boolean = false;
 
-    execute(delta: number): void {
+    execute(profile: string, delta: number): void {
         const systemVar = Variables.getInstance().system;
         const localPlayer = Server.getInstance().localPlayer;
         if (!systemVar.baseClientAddr || !localPlayer) return;
@@ -23,24 +23,24 @@ export class Balancer implements IBase {
         if(!nearest) return;
       
         if(localPlayer.position.x > nearest.position.x){
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.rWalk, 0, INT);
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.lWalk, 1, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.rWalk, 0, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.lWalk, 1, INT);
         }
 
         if(localPlayer.position.x < nearest.position.x){
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.lWalk, 0, INT);
-            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().client.rWalk, 1, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.lWalk, 0, INT);
+            writeMemory(Variables.getInstance().system.handle, Variables.getInstance().system.baseClientAddr! + Offsets.getInstance().profiles[profile].client.rWalk, 1, INT);
         }
 
         this.needReset = true;  
     }
 
-    resetWalk(): void {
+    resetWalk(profile: string): void {
         const systemVar = Variables.getInstance().system;
         if (!systemVar.baseClientAddr) return;
 
-        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().client.lWalk, 0, INT);
-        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().client.rWalk, 0, INT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().profiles[profile].client.lWalk, 0, INT);
+        writeMemory(systemVar.handle, systemVar.baseClientAddr! + Offsets.getInstance().profiles[profile].client.rWalk, 0, INT);
         this.needReset = false;
     }
     

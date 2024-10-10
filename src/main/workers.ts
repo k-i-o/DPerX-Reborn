@@ -7,6 +7,8 @@ import { Variables } from './models/singletons/Variables';
 import { IMenuCheatCategory } from '../interfaces/IMenuCheatCategory';
 import { compareArrays, convertScanCodeToKeyCode, getHotkeys, handleCheatToggle, rgbToHex } from './utils';
 
+let lastProfileSelected = "DDNet";
+
 const getCategories = (): IMenuCheatCategory[] => [
     {
         icon: '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-currency"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M4 4l3 3" /><path d="M20 4l-3 3" /><path d="M4 20l3 -3" /><path d="M20 20l-3 -3" /></svg>',
@@ -341,20 +343,20 @@ export function updater() {
         delta = now - time;       
         time = now;      
 
-        Server.getInstance().update();
+        Server.getInstance().update(lastProfileSelected);
 
         if(Variables.getInstance().spinbot.enabled) {
-            Variables.getInstance().spinbot.execute(delta);
+            Variables.getInstance().spinbot.execute(lastProfileSelected, delta);
         }
 
         if(Variables.getInstance().aimbot.enabled) {
-            Variables.getInstance().aimbot.execute(delta);
+            Variables.getInstance().aimbot.execute(lastProfileSelected, delta);
         }
 
         if(Variables.getInstance().balancer.enabled) {
-            Variables.getInstance().balancer.execute(delta);
+            Variables.getInstance().balancer.execute(lastProfileSelected, delta);
         } else if (Variables.getInstance().balancer.needReset) {
-            Variables.getInstance().balancer.resetWalk();
+            Variables.getInstance().balancer.resetWalk(lastProfileSelected);
         }
 
     });
@@ -363,8 +365,6 @@ export function updater() {
 function getProfiles() {
     return Object.keys(Offsets.getInstance().profiles).map(s=> {return {profileName:s}});
 }
-
-let lastProfileSelected = "DDNet";
 
 export function ipcListeners(window: BrowserWindow | null) {
 
@@ -396,15 +396,15 @@ export function ipcListeners(window: BrowserWindow | null) {
             return;
         }
 
-        const DDNetClient = Offsets.getInstance().profiles["DDNet"].exeName;
+        const DDNetClient = Offsets.getInstance().profiles[lastProfileSelected].exeName;
 
         try {
             const proc = openProcess(DDNetClient);
             Variables.getInstance().system.handle = proc.handle;
             const base = BigInt(proc.modBaseAddr);
 
-            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles["DDNet"].staticServerAddr, PTR);
-            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles["DDNet"].staticClientAddr, PTR);
+            Variables.getInstance().system.baseServerAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles[lastProfileSelected].staticServerAddr, PTR);
+            Variables.getInstance().system.baseClientAddr = readMemory(Variables.getInstance().system.handle, base + Offsets.getInstance().profiles[lastProfileSelected].staticClientAddr, PTR);
 
             Variables.getInstance().system.gameAttached = true;
 
@@ -431,9 +431,9 @@ export function ipcListeners(window: BrowserWindow | null) {
     //     }
     // });
 
-    ipcMain.on('resetOffsets', (event) => {
-        Offsets.getInstance().loadDefaultOffsets();
-        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets(lastProfileSelected), profiles: getProfiles() });
+    ipcMain.on('resetOffsets', (event, profile) => {
+        Offsets.getInstance().loadDefaultOffsets(profile);
+        event.reply('getCheatsAndOffsetsResponse', { cheats: getCategories(), offsets: getOffsets(profile), profiles: getProfiles() });
     });
 
     ipcMain.on('newHotkeys', (_, {cheatId, componentId, newValue}) => {
@@ -453,13 +453,17 @@ export function ipcListeners(window: BrowserWindow | null) {
         Variables.getInstance()[cheatId][componentId] = newValue;
     });
 
-    ipcMain.on('updateOffset', (_, {ids, value}) => {
+    ipcMain.on('updateOffset', (_, {ids, value, profile}) => {
         if(ids.length == 1) {
-            Offsets.getInstance()[ids[0]] = BigInt(value);
+            if(ids[0] == "exeName") {
+                Offsets.getInstance().profiles[profile][ids[0]] = value;
+            } else {
+                Offsets.getInstance().profiles[profile][ids[0]] = BigInt(value);
+            }
         } else if (ids.length == 2) {
-            Offsets.getInstance()[ids[0]][ids[1]] = BigInt(value);
+            Offsets.getInstance().profiles[profile][ids[0]][ids[1]] = BigInt(value);
         } else if (ids.length == 3) {
-            Offsets.getInstance()[ids[0]][ids[1]][ids[2]] = BigInt(value);
+            Offsets.getInstance().profiles[profile][ids[0]][ids[1]][ids[2]] = BigInt(value);
         }
     });
 

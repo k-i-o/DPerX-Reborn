@@ -26,6 +26,8 @@ let settings: Ref<ISetting[]> = ref([]);
 let activeCategory: Ref<IMenuCheatCategory | undefined> = ref();
 let activeSetting: Ref<{id:string,icon:string,options:any[]} | undefined> = ref();
 
+let selectedProfile = "DDNet";
+
 const send = window.electron.ipcRenderer.send;
 const on = window.electron.ipcRenderer.on;
 
@@ -135,7 +137,7 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets,profiles,currentProfile}) 
             id: 'reset all',
             type: 'button', 
             onChange: () => {
-                send('resetOffsets');
+                send('resetOffsets', selectedProfile);
             }
         },
         {
@@ -144,7 +146,7 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets,profiles,currentProfile}) 
             onChange: () => {
                 offsetsOptions.forEach(o => {
                     if(o.ids) {
-                        send('updateOffset', { ids: o.ids, value: o.value });
+                        send('updateOffset', { ids: o.ids, value: o.value, profile: selectedProfile });
                     }
                 });
             }
@@ -155,6 +157,7 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets,profiles,currentProfile}) 
             value: {profileName:currentProfile??'DDNet'},
             list: profiles,
             onChange: ({profileName}) => {
+                selectedProfile = profileName;
                 send('setNewProfile', profileName);
             }
         }
@@ -301,8 +304,6 @@ on('getCheatsAndOffsetsResponse', (_, {cheats,offsets,profiles,currentProfile}) 
                         const root = document.documentElement;
                         const color = `#${value}`;
                         root.style.setProperty('--c-t', color);
-
-                        console.log(adjustAlpha(lighten(color, 11), 0.9), lighten(color, 11), adjustAlpha(color, 0.9));
 
                         root.style.setProperty('--c-t-variant1', lighten(color, 6));
                         root.style.setProperty('--c-t-variant2', adjustAlpha(color, 0.8));
