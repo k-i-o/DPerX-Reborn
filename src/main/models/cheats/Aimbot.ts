@@ -17,8 +17,9 @@ export class Aimbot implements IBase {
     execute(profile: string, delta: number): void {
         const systemVar = Variables.getInstance().system;
         const localplayer = Server.getInstance().localPlayer;
-        if (!systemVar.baseClientAddr || !localplayer) return;
 
+        if (!systemVar.baseClientAddr || !localplayer) return;
+        
         const nearest = getNearestToPlayer(this.maxDistance);
         if(!nearest) return;
 

@@ -10,23 +10,23 @@ export function distance(a: IVector2, b: IVector2) {
 export function getNearestToPlayer(maxDistance: number): IPlayer | undefined {
     const server = Server.getInstance();
     const localPlayer = server.localPlayer;
-    
     if (!localPlayer) return undefined;
-
+    
     let closestPlayer: IPlayer | undefined;
     let closestDist = maxDistance;
-
+    
     for (const player of server.players) {
-        if (player.id != localPlayer.id && !player.frozen && player.gametick != 0) {
+        if (player.gametick != 0 && player.id != localPlayer.id && !player.frozen) {
             const dist = distance(player.position, localPlayer.position);
-
+            // console.log(player, localPlayer)
+            
             if (dist > 0 && dist < closestDist) {
                 closestDist = dist;
                 closestPlayer = player;
             }
         }
     }
-
+    
     return closestPlayer;
 }
 

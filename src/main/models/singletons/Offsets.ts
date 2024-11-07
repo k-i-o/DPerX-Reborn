@@ -67,8 +67,8 @@ export class Offsets {
 
         this.profiles["DDPer"] = {
             exeName: "DDPER.exe", 
-            staticServerAddr: BigInt(0x33DD18),
-            staticClientAddr: BigInt(0x2F2CB8),
+            staticServerAddr: BigInt(0x403C60),
+            staticClientAddr: BigInt(0x3B2C90),
             client: {
                 aimX: BigInt(0x10),
                 aimY: BigInt(0x14),
@@ -76,17 +76,17 @@ export class Offsets {
                 rWalk: BigInt(0xF8),
             },
             server: {
-                localPlayerId: BigInt(0x1428),
-                onlinePlayers: BigInt(0x142C),
-                gametick: BigInt(0x1454),
-                playerX: BigInt(0x1458),
-                playerY: BigInt(0x145C),
-                velX: BigInt(0x1460),
-                velY: BigInt(0x1464),
-                aimAngle: BigInt(0x1468),
-                frozenTime: BigInt(0x1498),
-                frozen: BigInt(0x14A4),
-                hookingTime: BigInt(0x147C)
+                localPlayerId: BigInt(0x22E0),
+                onlinePlayers: BigInt(0x22E4),
+                gametick: BigInt(0x230C),
+                playerX: BigInt(0x2310),
+                playerY: BigInt(0x2314),
+                velX: BigInt(0x2318),
+                velY: BigInt(0x231C),
+                aimAngle: BigInt(0x2320),
+                frozenTime: BigInt(0x2350),
+                frozen: BigInt(0x235C),
+                hookingTime: BigInt(0x2334)   
             }
         }
     }
@@ -125,26 +125,26 @@ export class Offsets {
             case "DDPer":
                 this.profiles["DDPer"] = {
                     exeName: "DDPER.exe", 
-                    staticServerAddr: BigInt(0x33DD18),
-                    staticClientAddr: BigInt(0x2F2CB8),
+                    staticServerAddr: BigInt(0x403C60),
+                    staticClientAddr: BigInt(0x3B2C90),
                     client: {
                         aimX: BigInt(0x10),
                         aimY: BigInt(0x14),
-                        lWalk: BigInt(0xF0),
-                        rWalk: BigInt(0xF8),
+                        lWalk: BigInt(0x100),
+                        rWalk: BigInt(0x108),
                     },
                     server: {
-                        localPlayerId: BigInt(0x1428),
-                        onlinePlayers: BigInt(0x142C),
-                        gametick: BigInt(0x1454),
-                        playerX: BigInt(0x1458),
-                        playerY: BigInt(0x145C),
-                        velX: BigInt(0x1460),
-                        velY: BigInt(0x1464),
-                        aimAngle: BigInt(0x1468),
-                        frozenTime: BigInt(0x1498),
-                        frozen: BigInt(0x14A4),
-                        hookingTime: BigInt(0x147C)
+                        localPlayerId: BigInt(0x22E0),
+                        onlinePlayers: BigInt(0x22E4),
+                        gametick: BigInt(0x230C),
+                        playerX: BigInt(0x2310),
+                        playerY: BigInt(0x2314),
+                        velX: BigInt(0x2318),
+                        velY: BigInt(0x231C),
+                        aimAngle: BigInt(0x2320),
+                        frozenTime: BigInt(0x2350),
+                        frozen: BigInt(0x235C),
+                        hookingTime: BigInt(0x2334)                                              
                     }
                 }
                 break;
