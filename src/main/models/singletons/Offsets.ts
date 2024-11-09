@@ -42,8 +42,8 @@ export class Offsets {
     loadAllDefaultOffsets() {
         this.profiles["DDNet"] = {
             exeName: "DDNet.exe",
-            staticServerAddr: BigInt(0x5C1900),
-            staticClientAddr: BigInt(0x463C20),
+            staticServerAddr: BigInt(0x5C24C0),
+            staticClientAddr: BigInt(0x469C80),
             client: {
                 aimX: BigInt(0x10),
                 aimY: BigInt(0x14),
@@ -98,8 +98,8 @@ export class Offsets {
             case "DDNet":
                 this.profiles["DDNet"] = {
                     exeName: "DDNet.exe",
-                    staticServerAddr: BigInt(0x5C1900),
-                    staticClientAddr: BigInt(0x463C20),
+                    staticServerAddr: BigInt(0x5C24C0),
+                    staticClientAddr: BigInt(0x469C80),
                     client: {
                         aimX: BigInt(0x10),
                         aimY: BigInt(0x14),
