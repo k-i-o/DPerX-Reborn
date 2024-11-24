@@ -65,5 +65,12 @@ Contributions and improvements are welcome!
 
 Note: don't install new dependencies if not needed
 
+## Preview
+![image](https://github.com/user-attachments/assets/56f061f9-f4fa-43b3-b584-2b71ba7dd774)
+![image](https://github.com/user-attachments/assets/9f3a2a47-39bf-437d-a9ae-1dd1d703b3b3)
+![image](https://github.com/user-attachments/assets/483648d6-0315-498b-8bbf-8df7828bcbd4)
+![image](https://github.com/user-attachments/assets/d95ef711-f051-4fb3-90b5-f987f0baff77)
+
+
 # License
 This project is licensed under the MIT License. See the LICENSE file for more details.
