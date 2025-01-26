@@ -10,7 +10,7 @@ import Select from 'primevue/select';
 import { Ref, ref } from 'vue';
 import { IMenuCheatCategory } from '../../interfaces/IMenuCheatCategory';
 import { ISetting } from '../../interfaces/ISetting';
-import { IMenuCheatItemComponent } from 'src/interfaces/IMenuCheatItemComponent';
+import { IMenuCheatItemComponent } from '../../interfaces/IMenuCheatItemComponent';
 import { adjustAlpha, darken, lighten, rgbToHex } from './utils';
 
 (window as any).goto = (url: string) => {
